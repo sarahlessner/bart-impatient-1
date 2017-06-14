@@ -17,6 +17,8 @@ $( document ).ready(function() {
 
 	//API URL for list of stations: http://api.bart.gov/api/stn.aspx?cmd=stns&key=ZVZV-PH5D-9W3T-DWE9&json=y
 
+	displayStations();
+
 	function displayStations() {
 		var queryURL = "https://api.bart.gov/api/stn.aspx?cmd=stns&key=ZVZV-PH5D-9W3T-DWE9&json=y";
 
@@ -29,10 +31,10 @@ $( document ).ready(function() {
 		    	for (var i = 0; i < response.root.stations.station.length; i++) {
 		    		var stationName = response.root.stations.station[i].name;
 		    		var stationAbbr = response.root.stations.station[i].abbr;
-		    		console.log("stationname", );
-		    		console.log("stationname", abbr);
+		    		console.log("stationname", stationName);
+		    		console.log("stationname", stationAbbr);
 
-		    	}
+		    	};
 
 
 			});
