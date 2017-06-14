@@ -17,6 +17,27 @@ $( document ).ready(function() {
 
 	//API URL for list of stations: http://api.bart.gov/api/stn.aspx?cmd=stns&key=ZVZV-PH5D-9W3T-DWE9&json=y
 
+	function displayStations() {
+		var queryURL = "https://api.bart.gov/api/stn.aspx?cmd=stns&key=ZVZV-PH5D-9W3T-DWE9&json=y";
+
+		    $.ajax({
+		      url: queryURL,
+		      method: "GET"
+		    }).done(function(response) {
+
+		    //loop through stations and push "name" and "abbr" to a arrays for user dropdown lists
+		    	for (var i = 0; i < response.root.stations.station.length; i++) {
+		    		var stationName = response.root.stations.station[i].name;
+		    		var stationAbbr = response.root.stations.station[i].abbr;
+		    		console.log("stationname", );
+		    		console.log("stationname", abbr);
+
+		    	}
+
+
+			});
+	};
+
 		//loop through stations and push "name" and "abbr" to a arrays for user dropdown lists
 			//append name array to ids: current-station & destination
 			//"abbr" array is needed for API calls for train info
