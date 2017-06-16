@@ -54,12 +54,11 @@ $( document ).ready(function() {
 	//PREVENT DEFAULT!!!!!!!!!!!!
 	//takes user input for origin and destination
 	
-			//based on value assigned to each list item for full station name, look up in abbreviation list array
+		//store the data-abbr attribute (stationAbbr) for the selections as global variables
 		//call getTripPlan function to look up route based on origin/dest
+		getTripPlan();
+	//function calling BARTS schedule info API to get a trip plan based on origin/dest
 
-	//write a function calling BARTS schedule info API to get a trip plan based on origin/dest
-
-	getTripPlan();
 	function getTripPlan() {
 
 		var queryURL = "https:api.bart.gov/api/sched.aspx?cmd=depart&orig="+originStation+"&dest="+destinationStation+"&date=now&key=ZVZV-PH5D-9W3T-DWE9&b=2&a=2&l=1&json=y";
@@ -79,9 +78,9 @@ $( document ).ready(function() {
 
 		    		//need trip legs/trainheadstation / transfer code / trip time
 		    		var myTrip = response.root.schedule.request.trip[i];
-		    		//Do JQUERY to make an empty box holding info for one trip
 
 		    		var legsArray = [];
+		    		//if the trip plan does not involve a transfer ("leg" is just an object)
 		    		if(myTrip.leg.length === undefined) {
 		    			var legOrigin = myTrip.leg['@origin'];
 		    			var legDest = myTrip.leg['@destination'];
@@ -93,7 +92,7 @@ $( document ).ready(function() {
 			    		var myLeg = [legOrigin, legDest, finalTrainDest];
 			    		legsArray.push(myLeg);
 		    		}
-		    		//for transfers required "leg" is an array of objects
+		    		//for transfers required ("leg" is an array of objects)
 		    		else {
 			    		for (j = 0; j < myTrip.leg.length; j++) {
 			    			var legOrigin = myTrip.leg[j]['@origin'];
@@ -110,7 +109,6 @@ $( document ).ready(function() {
 		    		}
 
 		    		tripsArray.push(legsArray);
-
 		    	};
 		    	console.log(tripsArray);
 				logMyTrips();
@@ -141,7 +139,7 @@ $( document ).ready(function() {
 		    	}
 		});
 	};
-
+//TODO: Replace the console logs with JQuery code to display to HTML
 	function logMyTrips() {
 		console.log("logMyTrips");
 		for(var i = 0; i < tripsArray.length; i++){
