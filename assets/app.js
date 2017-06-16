@@ -18,7 +18,7 @@ $( document ).ready(function() {
 	var originStation = "WARM";
 	var destinationStation = "WOAK";
 	//store direction of users train for real time look up
-	var direction = "";
+	var direction = "s";
 
 	displayStations();
 	stationsByLine();
@@ -73,24 +73,37 @@ $( document ).ready(function() {
 		    }).done(function(response) {
 		    	//for each available route at the station
 		    	for (j = 0; j < response.root.schedule.request.trip.length; j++) {
-		    		//TODO: can't access some info I need directly with dot notation - HELP
-		    		var finalDest = response.root.schedule.request.trip[j];
-		    		console.log(finalDest);
+		    		//TODO: can't access some info I need directly with dot notation - HELP 
+		    		//need trip legs/trainheadstation / transfer code / trip time
+		    		//figure out how to store direction
+		    		var trips = response.root.schedule.request.trip[j];
+		    		trips = JSON.stringify(trips);
+		    		
+		    		console.log("trips", trips);
+		    		// console.log("finalDest", finalDest);
 		    	}
-
 		});
 
 	};
-	
+	realTime();
 	//write a function to call BART API for real time train data
 	function realTime() {
 
-		var queryURL = "https://api.bart.gov/api/etd.aspx?cmd=etd&orig="+originStation+"&dir="+direction+"&key=ZVZV-PH5D-9W3T-DWE9json=y";
+		var queryURL = "https://api.bart.gov/api/etd.aspx?cmd=etd&orig="+originStation+"&key=ZVZV-PH5D-9W3T-DWE9&json=y";
 
 		$.ajax({
 		      url: queryURL,
 		      method: "GET"
 		    }).done(function(response) {
+		    	
+		    	for (i = 0; i < response.root.station.length; i++) {
+		    	//same issue as trip plan need abbrev (destination) minutes and length of train
+		    	var realTime = response.root.station[i];
+		    	console.log("realTime", realTime);
+		    	//get minutes to arrive
+
+		    	//train length
+		    	}
 
 		});
 	};
@@ -113,7 +126,7 @@ $( document ).ready(function() {
 		    		//push lists of stations on routes to multi-dimensional array
 		    		routeStationListsArray.push(stationsOnRoute);
 		    	}
-		    	console.log(routeNamesArray, routeStationListsArray);
+		    	// console.log(routeNamesArray, routeStationListsArray);
 		});    	
 
 	};
