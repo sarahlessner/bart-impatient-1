@@ -10,18 +10,14 @@ $( document ).ready(function() {
 	var stationNameArray = [];
 	//array containing ALL stations abbreviations - API calls use abbr
 	var stationAbbrArray = [];
-	//array containing names of all 12 routes - primarily for organization/maybe for displaying name of line
-	var routeNamesArray = [];
-	//multi-dimensional array containing lists of stations on the 12 routes 
-	var routeStationListsArray = [];
 	//store abbreviations from stationAbbrArray that correspond to user selections for origin/dest stations
 	var originStation = "WARM";
-	var destinationStation = "WOAK";
-	//store direction of users train for real time look up
-	var direction = "s";
+	var destinationStation = "PITT";
+	//multidimensional array storing data from getTripPlan function
+	var tripsArray = [];
 
 	displayStations();
-	stationsByLine();
+	//stationsByLine();
 
 	//function to pull station lists from BART API and push to arrays
 	function displayStations() {
@@ -40,13 +36,13 @@ $( document ).ready(function() {
 		    		stationAbbrArray.push(stationAbbr);
 		    		//append station list to <ul>origin list
 		    		originList = $("<li>");
-		    		originList.text(stationNameArray[i]);
-		    		originList.attr("value", i);
+		    		originList.text(stationName);
+		    		originList.attr("data-abbr", stationAbbr);
 		    		$("#origin-list").append(originList);
 		    		//append station list to <ul>destination list
 		    		destList = $("<li>");
-		    		destList.text(stationNameArray[i]);
-		    		originList.attr("value", i);
+		    		destList.text(stationName);
+		    		destList.attr("data-abbr", stationAbbr);
 		    		$("#destination-list").append(destList);
 
 		    	};
@@ -55,33 +51,69 @@ $( document ).ready(function() {
 	};
 
 	//On Click or other event for capturing user selections for origin/destination trains
-
+	//PREVENT DEFAULT!!!!!!!!!!!!
 	//takes user input for origin and destination
-		//accesses corresponding abbr for users stations & store as global variables
+	
 			//based on value assigned to each list item for full station name, look up in abbreviation list array
 		//call getTripPlan function to look up route based on origin/dest
 
 	//write a function calling BARTS schedule info API to get a trip plan based on origin/dest
+
 	getTripPlan();
 	function getTripPlan() {
 
 		var queryURL = "https:api.bart.gov/api/sched.aspx?cmd=depart&orig="+originStation+"&dest="+destinationStation+"&date=now&key=ZVZV-PH5D-9W3T-DWE9&b=2&a=2&l=1&json=y";
 		
 		$.ajax({
+			  // data: {
+			  // 	cmd: 'depart',
+			  // 	orig: originStation,
+			  // }
 		      url: queryURL,
 		      method: "GET"
 		    }).done(function(response) {
 		    	//for each available route at the station
-		    	for (j = 0; j < response.root.schedule.request.trip.length; j++) {
-		    		//TODO: can't access some info I need directly with dot notation - HELP 
+		    	// console.log(response.root.schedule.request.trip.length);
+		    	tripsArray = [];
+		    	for (i = 0; i < response.root.schedule.request.trip.length; i++) {
+
 		    		//need trip legs/trainheadstation / transfer code / trip time
-		    		//figure out how to store direction
-		    		var trips = response.root.schedule.request.trip[j];
-		    		trips = JSON.stringify(trips);
-		    		
-		    		console.log("trips", trips);
-		    		// console.log("finalDest", finalDest);
-		    	}
+		    		var myTrip = response.root.schedule.request.trip[i];
+		    		//Do JQUERY to make an empty box holding info for one trip
+
+		    		var legsArray = [];
+		    		if(myTrip.leg.length === undefined) {
+		    			var legOrigin = myTrip.leg['@origin'];
+		    			var legDest = myTrip.leg['@destination'];
+		    			var finalTrainDest = myTrip.leg['@trainHeadStation'];
+
+		    			console.log("trip origin:", legOrigin, "trip destination:", legDest, "final destination:", finalTrainDest);
+			    		// console.log("finalDest", finalDest);
+
+			    		var myLeg = [legOrigin, legDest, finalTrainDest];
+			    		legsArray.push(myLeg);
+		    		}
+		    		//for transfers required "leg" is an array of objects
+		    		else {
+			    		for (j = 0; j < myTrip.leg.length; j++) {
+			    			var legOrigin = myTrip.leg[j]['@origin'];
+			    			var legDest = myTrip.leg[j]['@destination'];
+			    			var finalTrainDest = myTrip.leg[j]['@trainHeadStation'];
+
+			    			console.log("trip origin:", legOrigin, "trip destination:", legDest, "final destination:", finalTrainDest);
+			    		// console.log("finalDest", finalDest);
+
+				    		var myLeg = [legOrigin, legDest, finalTrainDest];
+				    		legsArray.push(myLeg);
+
+			    		}
+		    		}
+
+		    		tripsArray.push(legsArray);
+
+		    	};
+		    	console.log(tripsArray);
+				logMyTrips();
 		});
 
 	};
@@ -98,38 +130,60 @@ $( document ).ready(function() {
 		    	
 		    	for (i = 0; i < response.root.station.length; i++) {
 		    	//same issue as trip plan need abbrev (destination) minutes and length of train
-		    	var realTime = response.root.station[i];
-		    	console.log("realTime", realTime);
-		    	//get minutes to arrive
+		    	var allRealTime = response.root.station[i];
 
-		    	//train length
+		    		for (j = 0; j < allRealTime.length; j++) {
+		    		console.log("realTime", allRealTime);
+		    		//get minutes to arrive
+
+		    		//train length
+		    		}
 		    	}
-
 		});
 	};
 
-	// api call to bart for all stops on every line (might not need this)
-	function stationsByLine() {
-
-		var queryURL = "https://api.bart.gov/api/route.aspx?cmd=routeinfo&route=all&key=ZVZV-PH5D-9W3T-DWE9&json=y";
-
-		$.ajax({
-		      url: queryURL,
-		      method: "GET"
-		    }).done(function(response) {
-		    	//loop through number of routes and pull route names and stations
-		    	for (var k = 0; k < response.root.routes.route.length; k++) {
-		    		var route = response.root.routes.route[k].name;
-		    		var stationsOnRoute = response.root.routes.route[k].config.station;
-		    		//push route names to array
-		    		routeNamesArray.push(route);
-		    		//push lists of stations on routes to multi-dimensional array
-		    		routeStationListsArray.push(stationsOnRoute);
-		    	}
-		    	// console.log(routeNamesArray, routeStationListsArray);
-		});    	
-
+	function logMyTrips() {
+		console.log("logMyTrips");
+		for(var i = 0; i < tripsArray.length; i++){
+			console.log("Trip Option " + i);
+			for(var j = 0; j < tripsArray[i].length; j++) {
+				console.log("Leg " + j);
+				console.log("legOrigin:      " + tripsArray[i][j][0]);
+				console.log("legDest:        " + tripsArray[i][j][1]);
+				console.log("finalTrainDest: " + tripsArray[i][j][2]);
+				console.log("");
+			}
+		}
 	};
+
+/*
+// api call to bart for all stops on every line (might not need this)
+//array containing names of all 12 routes - primarily for organization/maybe for displaying name of line
+	// var routeNamesArray = [];
+	// //multi-dimensional array containing lists of stations on the 12 routes 
+	// var routeStationListsArray = [];
+function stationsByLine() {
+
+	var queryURL = "https://api.bart.gov/api/route.aspx?cmd=routeinfo&route=all&key=ZVZV-PH5D-9W3T-DWE9&json=y";
+
+	$.ajax({
+		url: queryURL,
+		method: "GET"
+	}).done(function(response) {
+		//loop through number of routes and pull route names and stations
+		for (var k = 0; k < response.root.routes.route.length; k++) {
+			var route = response.root.routes.route[k].name;
+			var stationsOnRoute = response.root.routes.route[k].config.station;
+			//push route names to array
+			routeNamesArray.push(route);
+			//push lists of stations on routes to multi-dimensional array
+			routeStationListsArray.push(stationsOnRoute);
+		}
+		// console.log(routeNamesArray, routeStationListsArray);
+	});    	
+
+};
+*/
 //--------//
 //saving some psuedocode for reference but probably irrel
 
