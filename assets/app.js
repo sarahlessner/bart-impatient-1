@@ -13,16 +13,15 @@ $( document ).ready(function() {
 	var stationAbbrArray = [];
 	var stationAbbr = "";
 	//store abbreviations from stationAbbrArray that correspond to user selections for origin/dest stations
-	var originStation = "WOAK";
-	var destinationStation = "SANL";
+	var originStation;
+	var destinationStation;
 	//multidimensional array storing data from getTripPlan function
 	var tripsArray = [];
 	//multidimensional array storing data from realTime function
 	var realTimeArray = [];
 	//default to checking current time but here if user inputs a time. format: (time=h:mm+am/pm)
 	var time = "now";
-	var testOrigin = "";
-	var testDestination = "";
+	
 
 	displayStations();
 	//stationsByLine();
@@ -46,13 +45,13 @@ $( document ).ready(function() {
 		    		originList = $("<option>");
 		    		originList.addClass("origin-selection");
 		    		originList.text(stationName);
-		    		originList.attr("data-abbr", stationAbbr);
+		    		originList.attr("value", stationAbbr);
 		    		$("#origin-list").append(originList);
 		    		//append station list to <ul>destination list
 		    		destList = $("<option>");
 		    		destList.addClass("destination-selection");
 		    		destList.text(stationName);
-		    		destList.attr("data-abbr", stationAbbr);
+		    		destList.attr("value", stationAbbr);
 		    		$("#destination-list").append(destList);
 
 		    	};
@@ -60,25 +59,16 @@ $( document ).ready(function() {
 			});
 	};
 
-	$("body").on("click", ".origin-selection", function(){
-		testOrigin = $(this).attr("data-abbr");
-		console.log("TEST ORIGIN", testOrigin);
-		
-	});
-
-	$("body").on("click", ".destination-selection", function(){
-		testDestination = $(this).attr("data-abbr");
-		console.log("TEST DESTINATION", testDestination);
-
-	});
-
-	//On Click or other event for capturing user selections for origin/destination trains
-	//PREVENT DEFAULT!!!!!!!!!!!!
-	//takes user input for origin and destination
-	
-		//store the data-abbr attribute (stationAbbr) for the selections as global variables
-		//call getTripPlan function to look up route based on origin/dest
+	$("#addTrainBtn").on("click", function(){
+		event.preventDefault();
+		originStation = $("#origin-list").val();
+		destinationStation = $("#destination-list").val();
+		console.log("ORIGIN", originStation);
+		console.log("DESTINATION", destinationStation);
 		getTripPlan();
+		realTime();
+	});
+
 	//function calling BARTS schedule info API to get a trip plan based on origin/dest
 
 	function getTripPlan() {
@@ -141,7 +131,7 @@ $( document ).ready(function() {
 
 	};
 
-	realTime();
+	
 	//write a function to call BART API for real time train data
 	function realTime() {
 
