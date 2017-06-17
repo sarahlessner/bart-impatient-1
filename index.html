@@ -62,27 +62,12 @@
 
 					<div class="panel-body">
 						<form>
-							<div class="dropdown">
-								<button class="btn btn-default dropdown-toggle" type="button" id="origin" data-toggle="dropdown">Select Origin
-								<span class="caret"></span></button>
-								<ul class="dropdown-menu" id="origin-list" role="menu" aria-labelledby="menu1">
-      								<!-- note from Sarah: I appended the list items in js but drop down button not operating -->
-    							</ul>
-  							</div>
-
-
-
-
-
-  							<div class="dropdown">
-								<button class="btn btn-default dropdown-toggle" type="button" id="destination" data-toggle="dropdown">Select Destination
-								<span class="caret"></span></button>
-								<ul class="dropdown-menu" id="destination-list" role="menu" aria-labelledby="menu1">
-      								<!-- note from Sarah: I appended the list items in js but drop down button not operating -->
-    							</ul>
-  							</div>
-
-
+							<select class="form-control" id="origin-list">
+  								<!-- station options list will live here -->
+							</select>
+							<select class="form-control" id="destination-list">
+  								<!-- station options list will live here -->
+							</select>
 							
 							<button type="submit" class="btn btn-primary" id="addTrainBtn">Submit</button>
 						</form>
