@@ -63,14 +63,22 @@
 
 					<div class="panel-body">
 						<form>
-							<select class="form-control" id="origin-list">
-  								<!-- station options list will live here -->
-							</select>
-							<select class="form-control" id="destination-list">
-  								<!-- station options list will live here -->
-							</select>
-							
-							<button type="submit" class="btn btn-primary" id="addTrainBtn">Submit</button>
+						<label for="timeInput" class="col-2 col-form-label">Departure Time</label>
+				    <div class="col-10">
+				        <input class="form-control" type="text" value="h:mm" id="example-text-input">
+				    </div>
+				    	<select class="form-control" id="am-pm">
+				        	<option>AM</option>
+				        	<option>PM</option>
+				     	</select>
+						<select class="form-control" id="origin-list">
+								<!-- station options list will live here -->
+						</select>
+						<select class="form-control" id="destination-list">
+								<!-- station options list will live here -->
+						</select>
+						
+						<button type="submit" class="btn btn-primary" id="addTrainBtn">Submit</button>
 						</form>
 					</div>
 				</div>
@@ -79,17 +87,17 @@
 	</div>
 
 	<!-- REAL TIME DATA - WILL DISPLAY ALL TRAINS AT ORIGIN STATION ID #real-time-->
-	<div >
+	<div id="real-time">
 	<!--real time data from JS will append here -->
 	</div>
 
 	<!--SCHEDULE DATA - WILL DISPLAY USERS TRIP PLANS #trip-plan -->
-	<div>
+	<div id="trip-plan">
 	<!--schedule data from JS will append here -->
 	</div>
 
 	<!--YOUTUBE VIDEO #youtube-->
-	<div>
+	<div id="youtube">
 	<!--youtube video code from JS will append here -->
 	</div>
 
