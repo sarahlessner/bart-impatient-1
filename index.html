@@ -4,17 +4,49 @@
 	<meta charset="UTF-8">
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-
-	
-
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-
-	
-
   	
-
 </head>
+
+
+
+
+
 <body>
+	<header id="main-header">
+		<div class="container">
+			<section class="hero">
+				<div class="container">
+					<div class="brand">
+						<img src="https://www.bart.gov/sites/default/files/images/news/Exterior%203%2025%2014.jpg" class="brand-img img-responsive" data-selector="img" style="outline: none; cursor: inherit;">
+					</div>
+
+				<div class="col-md-8 col-md-offset-2 text-center">
+					<div class="someContent" data-selector=".editContent" style="outline: none; cursor: inherit;">
+						<h1>This is a test header</h1>
+					</div>
+
+					<div class="editContent" data-selector=".editContent">
+						<p class="lead">This is some text that I am using as a placeholder</p>
+					</div>
+				</div>
+
+				<div class="col-md-6 col-md-offset-3 text-center">
+					<div class="col-md-6">
+						<a href="#" class="btn btn-info btn-block" data-selector="a.btn, button.btn" style="outline: none; cursor: inherit;">Where are you?</a>
+					</div>
+				
+					<div class="col-md-6">
+						<a href="#" class="btn btn-danger btn-block" data-selector="a.btn, button.btn" style="outline: none; cursor: inherit;">WHere are you headed</a>
+					</div>
+				</div>
+				
+				</div>
+		</section>
+		
+    </header>
+    <!--// END HEADER 3 -->
+	
 
 	<div class="container">
 		<div class="jumbotron">
@@ -31,7 +63,7 @@
 					<div class="panel-body">
 						<form>
 							<div class="dropdown">
-								<button class="btn btn-default dropdown-toggle" type="button" id="origin" data-toggle="dropdown">Origin
+								<button class="btn btn-default dropdown-toggle" type="button" id="origin" data-toggle="dropdown">Select Origin
 								<span class="caret"></span></button>
 								<ul class="dropdown-menu" id="origin-list" role="menu" aria-labelledby="menu1">
       								<!-- note from Sarah: I appended the list items in js but drop down button not operating -->
@@ -42,13 +74,8 @@
 
 
 
-
-
-
-
-
   							<div class="dropdown">
-								<button class="btn btn-default dropdown-toggle" type="button" id="destination" data-toggle="dropdown">Destination
+								<button class="btn btn-default dropdown-toggle" type="button" id="destination" data-toggle="dropdown">Select Destination
 								<span class="caret"></span></button>
 								<ul class="dropdown-menu" id="destination-list" role="menu" aria-labelledby="menu1">
       								<!-- note from Sarah: I appended the list items in js but drop down button not operating -->
