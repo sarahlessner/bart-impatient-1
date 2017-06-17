@@ -8,8 +8,10 @@ $( document ).ready(function() {
 
 	//array containining ALL stations in BART system
 	var stationNameArray = [];
+	var stationName = "";
 	//array containing ALL stations abbreviations - API calls use abbr
 	var stationAbbrArray = [];
+	var stationAbbr = "";
 	//store abbreviations from stationAbbrArray that correspond to user selections for origin/dest stations
 	var originStation = "WOAK";
 	var destinationStation = "SANL";
@@ -19,6 +21,8 @@ $( document ).ready(function() {
 	var realTimeArray = [];
 	//default to checking current time but here if user inputs a time. format: (time=h:mm+am/pm)
 	var time = "now";
+	var testOrigin = "";
+	var testDestination = "";
 
 	displayStations();
 	//stationsByLine();
@@ -34,17 +38,19 @@ $( document ).ready(function() {
 
 		    //loop through stations and push "name" and "abbr" to arrays for user dropdown lists
 		    	for (var i = 0; i < response.root.stations.station.length; i++) {
-		    		var stationName = response.root.stations.station[i].name;
-		    		var stationAbbr = response.root.stations.station[i].abbr;
+		    		stationName = response.root.stations.station[i].name;
+		    		stationAbbr = response.root.stations.station[i].abbr;
 		    		stationNameArray.push(stationName);
 		    		stationAbbrArray.push(stationAbbr);
 		    		//append station list to <ul>origin list
-		    		originList = $("<li>");
+		    		originList = $("<option>");
+		    		originList.addClass("origin-selection");
 		    		originList.text(stationName);
 		    		originList.attr("data-abbr", stationAbbr);
 		    		$("#origin-list").append(originList);
 		    		//append station list to <ul>destination list
-		    		destList = $("<li>");
+		    		destList = $("<option>");
+		    		destList.addClass("destination-selection");
 		    		destList.text(stationName);
 		    		destList.attr("data-abbr", stationAbbr);
 		    		$("#destination-list").append(destList);
@@ -53,6 +59,18 @@ $( document ).ready(function() {
 
 			});
 	};
+
+	$("body").on("click", ".origin-selection", function(){
+		testOrigin = $(this).attr("data-abbr");
+		console.log("TEST ORIGIN", testOrigin);
+		
+	});
+
+	$("body").on("click", ".destination-selection", function(){
+		testDestination = $(this).attr("data-abbr");
+		console.log("TEST DESTINATION", testDestination);
+
+	});
 
 	//On Click or other event for capturing user selections for origin/destination trains
 	//PREVENT DEFAULT!!!!!!!!!!!!
