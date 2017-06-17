@@ -11,10 +11,14 @@ $( document ).ready(function() {
 	//array containing ALL stations abbreviations - API calls use abbr
 	var stationAbbrArray = [];
 	//store abbreviations from stationAbbrArray that correspond to user selections for origin/dest stations
-	var originStation = "WARM";
-	var destinationStation = "PITT";
+	var originStation = "WOAK";
+	var destinationStation = "SANL";
 	//multidimensional array storing data from getTripPlan function
 	var tripsArray = [];
+	//multidimensional array storing data from realTime function
+	var realTimeArray = [];
+	//default to checking current time but here if user inputs a time. format: (time=h:mm+am/pm)
+	var time = "now";
 
 	displayStations();
 	//stationsByLine();
@@ -67,6 +71,9 @@ $( document ).ready(function() {
 			  // data: {
 			  // 	cmd: 'depart',
 			  // 	orig: originStation,
+			  //	time: time,
+			  //	b: 0,
+			  //	a: 3,
 			  // }
 		      url: queryURL,
 		      method: "GET"
@@ -76,15 +83,14 @@ $( document ).ready(function() {
 		    	tripsArray = [];
 		    	for (i = 0; i < response.root.schedule.request.trip.length; i++) {
 
-		    		//need trip legs/trainheadstation / transfer code / trip time
 		    		var myTrip = response.root.schedule.request.trip[i];
-
 		    		var legsArray = [];
 		    		//if the trip plan does not involve a transfer ("leg" is just an object)
 		    		if(myTrip.leg.length === undefined) {
 		    			var legOrigin = myTrip.leg['@origin'];
 		    			var legDest = myTrip.leg['@destination'];
 		    			var finalTrainDest = myTrip.leg['@trainHeadStation'];
+		    			var load = myTrip.leg['@load'];
 
 		    			console.log("trip origin:", legOrigin, "trip destination:", legDest, "final destination:", finalTrainDest);
 			    		// console.log("finalDest", finalDest);
@@ -92,12 +98,13 @@ $( document ).ready(function() {
 			    		var myLeg = [legOrigin, legDest, finalTrainDest];
 			    		legsArray.push(myLeg);
 		    		}
-		    		//for transfers required ("leg" is an array of objects)
+		    		//else a transfer is required ("leg" is an array of objects)
 		    		else {
 			    		for (j = 0; j < myTrip.leg.length; j++) {
 			    			var legOrigin = myTrip.leg[j]['@origin'];
 			    			var legDest = myTrip.leg[j]['@destination'];
 			    			var finalTrainDest = myTrip.leg[j]['@trainHeadStation'];
+			    			var load = myTrip.leg['@load'];
 
 			    			console.log("trip origin:", legOrigin, "trip destination:", legDest, "final destination:", finalTrainDest);
 			    		// console.log("finalDest", finalDest);
@@ -110,11 +117,12 @@ $( document ).ready(function() {
 
 		    		tripsArray.push(legsArray);
 		    	};
-		    	console.log(tripsArray);
+		    	// console.log(tripsArray);
 				logMyTrips();
 		});
 
 	};
+
 	realTime();
 	//write a function to call BART API for real time train data
 	function realTime() {
@@ -125,25 +133,47 @@ $( document ).ready(function() {
 		      url: queryURL,
 		      method: "GET"
 		    }).done(function(response) {
-		    	
-		    	for (i = 0; i < response.root.station.length; i++) {
-		    	//same issue as trip plan need abbrev (destination) minutes and length of train
-		    	var allRealTime = response.root.station[i];
-
-		    		for (j = 0; j < allRealTime.length; j++) {
-		    		console.log("realTime", allRealTime);
-		    		//get minutes to arrive
-
-		    		//train length
+		    	realTimeArray = [];
+		    	//get all real time data at the origin station
+		    	var allRealTime = response.root.station[0];
+		    	console.log("all real time", allRealTime);
+		    	var etd = allRealTime.etd;
+		    	console.log("etd", etd);
+		    	//loop through ETD info
+		    	for (i = 0; i < etd.length; i++) {
+		    		var etdArray = [];
+		    		//get train line (final dest) and abbrev for all trains
+		    		var allRealTimeDest = etd[i].destination;
+		    		var allRealTimeAbbr = etd[i].abbreviation;
+		    		console.log("destination", allRealTimeDest, "abbrev", allRealTimeAbbr);
+		    		var allEstimates = etd[i].estimate;
+		    		console.log("estimates", allEstimates);
+		    		etdArray.push(allRealTimeDest, allRealTimeAbbr);
+		    		//loop through estimate information for all specific trains arriving
+		    		for (j = 0; j < allEstimates.length; j++) {
+		    			var minutesToArrive = allEstimates[j].minutes;
+		    			var trainLength = allEstimates[j]['length'];
+		    			var lineColor = allEstimates[j].color;
+		    			console.log("minutesToArrive", minutesToArrive, "trainLength", trainLength, "lineColor", lineColor);
+		    			var estimatesArray = [minutesToArrive,trainLength,lineColor];
+		    			etdArray.push(estimatesArray);
 		    		}
-		    	}
+		    		realTimeArray.push(etdArray);
+		    	};	 
+		    console.log(realTimeArray);
+		    displayRealTime();	
 		});
+	
 	};
+
+//function to display data from getTripPlan function
 //TODO: Replace the console logs with JQuery code to display to HTML
 	function logMyTrips() {
 		console.log("logMyTrips");
+		//loop through all of the trip plans based on users origin/dest
 		for(var i = 0; i < tripsArray.length; i++){
 			console.log("Trip Option " + i);
+			//loop through the train level data for leg(s) of each trip
 			for(var j = 0; j < tripsArray[i].length; j++) {
 				console.log("Leg " + j);
 				console.log("legOrigin:      " + tripsArray[i][j][0]);
@@ -153,9 +183,27 @@ $( document ).ready(function() {
 			}
 		}
 	};
+//function to display the data from realTime function
+	function displayRealTime() {
+		console.log("displayRealTime");
+		//loop through array containing all etd data 
+		for (var i = 0; i < realTimeArray.length; i++) {
+			console.log("etd" + i); 
+			//logging name & abbrev of final destination of each train line passing through origin station
+			console.log("train destination name", realTimeArray[i][0], "abbr", realTimeArray[i][1]);
+			//looping through all train level estimate data for the origin station
+			for (var j = 2; j < realTimeArray[i].length; j++) {
+				console.log("estimate" + j);
+				console.log("minutes away", realTimeArray[i][j][0]);
+				console.log("length", realTimeArray[i][j][1]);
+				console.log("line color", realTimeArray[i][j][2]);
+				console.log("_____");
+			}
+		}
+	};
 
 /*
-// api call to bart for all stops on every line (might not need this)
+// api call to bart for all stops on every line (don't need for xfer but might need for upstreaming)
 //array containing names of all 12 routes - primarily for organization/maybe for displaying name of line
 	// var routeNamesArray = [];
 	// //multi-dimensional array containing lists of stations on the 12 routes 
