@@ -21,7 +21,9 @@ $( document ).ready(function() {
 	var realTimeArray = [];
 	//default to checking current time but here if user inputs a time. format: (time=h:mm+am/pm)
 	var myTime;
-	
+	//array with 5 load values - will pull load number 0-4 from API and access this array at load idx
+	//0 load from bart means load info not available
+	var loadArray = ["unavailable", "light", "normal","heavy","crowded"];
 
 	displayStations();
 	//stationsByLine();
@@ -114,7 +116,7 @@ $( document ).ready(function() {
 
 	function getTripPlan() {
 
-		var queryURL = "https://api.bart.gov/api/sched.aspx?cmd=depart&orig="+originStation+"&dest="+destinationStation+"&time="+myTime+"&key=ZVZV-PH5D-9W3T-DWE9&b=2&a=2&l=1&json=y";
+		var queryURL = "https://api.bart.gov/api/sched.aspx?cmd=depart&orig="+originStation+"&dest="+destinationStation+"&time="+myTime+"&key=ZVZV-PH5D-9W3T-DWE9&b=1&a=2&l=1&json=y";
 		
 		$.ajax({
 			  // data: {
@@ -255,16 +257,21 @@ $( document ).ready(function() {
 		console.log("displayRealTime");
 		//loop through array containing all etd data 
 		for (var i = 0; i < realTimeArray.length; i++) {
-			console.log("etd" + i); 
-			//logging name & abbrev of final destination of each train line passing through origin station
-			console.log("train destination name", realTimeArray[i][0], "abbr", realTimeArray[i][1]);
+			console.log("etd" + i);
+			//create a div for each piece of ETD data
+			var etd = $("<div>");
+			etd.addClass("etd-train");
+			var finalTrainDest = realTimeArray[i][0];
+			etd.append(finalTrainDest);
+			// console.log("train destination name", realTimeArray[i][0]);
 			//looping through all train level estimate data for the origin station
 			for (var j = 2; j < realTimeArray[i].length; j++) {
-				console.log("estimate" + j);
-				console.log("minutes away", realTimeArray[i][j][0]);
-				console.log("length", realTimeArray[i][j][1]);
-				console.log("line color", realTimeArray[i][j][2]);
-				console.log("_____");
+				// console.log("estimate" + j);
+				// console.log("minutes away", realTimeArray[i][j][0]);
+				// console.log("length", realTimeArray[i][j][1]);
+				// console.log("line color", realTimeArray[i][j][2]);
+				// console.log("_____");
+				$("#real-time").append(etd);
 			}
 		}
 	};
