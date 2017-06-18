@@ -20,7 +20,7 @@ $( document ).ready(function() {
 	//multidimensional array storing data from realTime function
 	var realTimeArray = [];
 	//default to checking current time but here if user inputs a time. format: (time=h:mm+am/pm)
-	var time = "now";
+	var myTime;
 	
 
 	displayStations();
@@ -59,21 +59,64 @@ $( document ).ready(function() {
 			});
 	};
 
+	//hide am-pm field as the default
+	$("#am-pm").hide();
+	$("#time-input").hide();
+	//on click to show fields for departure time entry
+	$("#enter-time").on("click", function(){
+		event.preventDefault();
+		$("#am-pm").toggle();
+		$("#time-input").toggle();
+	});
+	
+	// $(document).on("keypress", "#time-input", function(){
+	// 	if ($(this).val()) {
+	// 		$("#am-pm").show();
+	// 	}
+	// 	else {
+	// 		$("#am-pm").hide();
+	// 	}
+	// }); 
+
 	$("#addTrainBtn").on("click", function(){
 		event.preventDefault();
 		originStation = $("#origin-list").val();
 		destinationStation = $("#destination-list").val();
+		ampm = $("#am-pm").val();
+		timeInput = $("#time-input").val();
+
+		if ((timeInput != "") && (ampm === "")) {
+			alert("please clear your time entry or select am/pm");
+			return;
+		}
+
+		if ((timeInput === "") && (ampm === "")) {
+			myTime = "now";
+		}
+
+		else {
+			if (validateTime()) {
+			myTime = timeInput+ampm;
+			}
+		}
+
 		console.log("ORIGIN", originStation);
 		console.log("DESTINATION", destinationStation);
+		console.log("TIME", myTime);
 		getTripPlan();
 		realTime();
 	});
+
+	//function to validate time input 
+	function validateTime() {
+		return true;
+	};
 
 	//function calling BARTS schedule info API to get a trip plan based on origin/dest
 
 	function getTripPlan() {
 
-		var queryURL = "https:api.bart.gov/api/sched.aspx?cmd=depart&orig="+originStation+"&dest="+destinationStation+"&date=now&key=ZVZV-PH5D-9W3T-DWE9&b=2&a=2&l=1&json=y";
+		var queryURL = "https:api.bart.gov/api/sched.aspx?cmd=depart&orig="+originStation+"&dest="+destinationStation+"&time="+myTime+"&key=ZVZV-PH5D-9W3T-DWE9&b=2&a=2&l=1&json=y";
 		
 		$.ajax({
 			  // data: {
@@ -99,10 +142,8 @@ $( document ).ready(function() {
 		    			var legDest = myTrip.leg['@destination'];
 		    			var finalTrainDest = myTrip.leg['@trainHeadStation'];
 		    			var load = myTrip.leg['@load'];
-
-		    			console.log("trip origin:", legOrigin, "trip destination:", legDest, "final destination:", finalTrainDest);
+		    			// console.log("trip origin:", legOrigin, "trip destination:", legDest, "final destination:", finalTrainDest);
 			    		// console.log("finalDest", finalDest);
-
 			    		var myLeg = [legOrigin, legDest, finalTrainDest];
 			    		legsArray.push(myLeg);
 		    		}
@@ -113,8 +154,7 @@ $( document ).ready(function() {
 			    			var legDest = myTrip.leg[j]['@destination'];
 			    			var finalTrainDest = myTrip.leg[j]['@trainHeadStation'];
 			    			var load = myTrip.leg['@load'];
-
-			    			console.log("trip origin:", legOrigin, "trip destination:", legDest, "final destination:", finalTrainDest);
+			    			// console.log("trip origin:", legOrigin, "trip destination:", legDest, "final destination:", finalTrainDest);
 			    		// console.log("finalDest", finalDest);
 
 				    		var myLeg = [legOrigin, legDest, finalTrainDest];
@@ -122,7 +162,6 @@ $( document ).ready(function() {
 
 			    		}
 		    		}
-
 		    		tripsArray.push(legsArray);
 		    	};
 		    	// console.log(tripsArray);
@@ -131,7 +170,6 @@ $( document ).ready(function() {
 
 	};
 
-	
 	//write a function to call BART API for real time train data
 	function realTime() {
 
@@ -144,31 +182,31 @@ $( document ).ready(function() {
 		    	realTimeArray = [];
 		    	//get all real time data at the origin station
 		    	var allRealTime = response.root.station[0];
-		    	console.log("all real time", allRealTime);
+		    	// console.log("all real time", allRealTime);
 		    	var etd = allRealTime.etd;
-		    	console.log("etd", etd);
+		    	// console.log("etd", etd);
 		    	//loop through ETD info
 		    	for (i = 0; i < etd.length; i++) {
 		    		var etdArray = [];
 		    		//get train line (final dest) and abbrev for all trains
 		    		var allRealTimeDest = etd[i].destination;
 		    		var allRealTimeAbbr = etd[i].abbreviation;
-		    		console.log("destination", allRealTimeDest, "abbrev", allRealTimeAbbr);
+		    		// console.log("destination", allRealTimeDest, "abbrev", allRealTimeAbbr);
 		    		var allEstimates = etd[i].estimate;
-		    		console.log("estimates", allEstimates);
+		    		// console.log("estimates", allEstimates);
 		    		etdArray.push(allRealTimeDest, allRealTimeAbbr);
 		    		//loop through estimate information for all specific trains arriving
 		    		for (j = 0; j < allEstimates.length; j++) {
 		    			var minutesToArrive = allEstimates[j].minutes;
 		    			var trainLength = allEstimates[j]['length'];
 		    			var lineColor = allEstimates[j].color;
-		    			console.log("minutesToArrive", minutesToArrive, "trainLength", trainLength, "lineColor", lineColor);
+		    			// console.log("minutesToArrive", minutesToArrive, "trainLength", trainLength, "lineColor", lineColor);
 		    			var estimatesArray = [minutesToArrive,trainLength,lineColor];
 		    			etdArray.push(estimatesArray);
 		    		}
 		    		realTimeArray.push(etdArray);
 		    	};	 
-		    console.log(realTimeArray);
+		    // console.log(realTimeArray);
 		    displayRealTime();	
 		});
 	

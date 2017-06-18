@@ -63,22 +63,26 @@
 
 					<div class="panel-body">
 						<form>
-						<label for="timeInput" class="col-2 col-form-label">Departure Time</label>
-				    <div class="col-10">
-				        <input class="form-control" type="text" value="h:mm" id="example-text-input">
-				    </div>
-				    	<select class="form-control" id="am-pm">
-				        	<option>AM</option>
-				        	<option>PM</option>
-				     	</select>
-						<select class="form-control" id="origin-list">
-								<!-- station options list will live here -->
-						</select>
-						<select class="form-control" id="destination-list">
-								<!-- station options list will live here -->
-						</select>
-						
-						<button type="submit" class="btn btn-primary" id="addTrainBtn">Submit</button>
+								<!-- <label for="timeInput" class="col-2 col-form-label">Click to Enter Departure Time</label> -->
+							<button class="btn btn-primary" id="enter-time">Enter Departure Time (Optional)</button> <!--TODO: add hover event to button that says some variation of "defaults to current time" -->
+						    <div class="col-10">
+						        <input class="form-control" type="text" placeholder="h:mm" id="time-input">
+						    </div>
+					    	<select class="form-control" id="am-pm">
+					    		<option value="">Select AM/PM</option><!-- TODO:change text of "Select AM/PM" to match the placeholder text styling of the text input -->
+					        	<option value="am">AM</option>
+					        	<option value="pm">PM</option>
+					     	</select>
+						<!-- list drop downs will always display on page load -->
+							<select class="form-control" id="origin-list">
+									<!-- station options list will live here -->
+							</select>
+							<select class="form-control" id="destination-list">
+									<!-- station options list will live here -->
+							</select>
+
+							
+							<button type="submit" class="btn btn-primary" id="addTrainBtn">Submit</button>
 						</form>
 					</div>
 				</div>
