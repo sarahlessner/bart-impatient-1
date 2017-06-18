@@ -59,10 +59,10 @@ $( document ).ready(function() {
 			});
 	};
 
-	//hide am-pm field as the default
+	//hide time entry fields as the default
 	$("#am-pm").hide();
 	$("#time-input").hide();
-	//on click to show fields for departure time entry
+	//on click to toggle fields for departure time entry
 	$("#enter-time").on("click", function(){
 		event.preventDefault();
 		$("#am-pm").toggle();
@@ -78,24 +78,29 @@ $( document ).ready(function() {
 	// 	}
 	// }); 
 
+	//on click for submit button
 	$("#addTrainBtn").on("click", function(){
 		event.preventDefault();
+		//stores the "abbr" for the selected stations
 		originStation = $("#origin-list").val();
 		destinationStation = $("#destination-list").val();
+		//gets time entry values
 		ampm = $("#am-pm").val();
-		timeInput = $("#time-input").val();
-
+		var timeInput = $("#time-input").val();
+		//checks if user entered a time without selecting "AM" or "PM"
 		if ((timeInput != "") && (ampm === "")) {
+			//we're not allowed to use alerts so we'll have to do something else but this is here to test
 			alert("please clear your time entry or select am/pm");
 			return;
 		}
-
+		//sets time to "now" if the user does not enter a time
 		if ((timeInput === "") && (ampm === "")) {
 			myTime = "now";
 		}
-
+		//if they entered a time properly, execute function to validate
 		else {
-			if (validateTime()) {
+			if (validateTime(timeInput)) {
+			//if time is valid store the input 
 			myTime = timeInput+ampm;
 			}
 		}
@@ -108,8 +113,9 @@ $( document ).ready(function() {
 	});
 
 	//function to validate time input 
-	function validateTime() {
-		return true;
+	function validateTime(timestring) {
+		var checkUserTime = moment(timestring,'h:mm');
+		return checkUserTime.isValid();
 	};
 
 	//function calling BARTS schedule info API to get a trip plan based on origin/dest
