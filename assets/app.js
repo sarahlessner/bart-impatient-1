@@ -259,15 +259,18 @@ $( document ).ready(function() {
 		for (var i = 0; i < realTimeArray.length; i++) {
 			console.log("etd" + i);
 			//create a div for each piece of ETD data
-			var etd = $("<div>");
+			// var etd = $("<div>");
+			var etd = $("<div style='background-color: "+realTimeArray[i][2][2]+ "'>");
 			etd.addClass("etd-train");
-			var finalTrainDest = realTimeArray[i][0];
-			etd.append(finalTrainDest);
+			etd.append(realTimeArray[i][0]+"<br>");
 			// console.log("train destination name", realTimeArray[i][0]);
 			//looping through all train level estimate data for the origin station
 			for (var j = 2; j < realTimeArray[i].length; j++) {
 				// console.log("estimate" + j);
-				// console.log("minutes away", realTimeArray[i][j][0]);
+				//minsaway
+				etd.append(realTimeArray[i][j][0]+"min"+" ");
+				console.log("minutes away", realTimeArray[i][j][0]);
+				etd.append(realTimeArray[i][j][1]+" "+"cars"+" ");
 				// console.log("length", realTimeArray[i][j][1]);
 				// console.log("line color", realTimeArray[i][j][2]);
 				// console.log("_____");
