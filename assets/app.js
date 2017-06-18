@@ -216,28 +216,36 @@ $( document ).ready(function() {
 //function to display data from getTripPlan function
 //TODO: Replace the console logs with JQuery code to display to HTML
 	function logMyTrips() {
-		console.log("logMyTrips");
+		// console.log("logMyTrips");
 		//loop through all of the trip plans based on users origin/dest
 		for(var i = 0; i < tripsArray.length; i++){
 			//creates a div element for each trip option
 			var tripOption = $("<div>");
 			tripOption.addClass("trip-option");
-			console.log("Trip Option " + i);
+			// console.log("Trip Option " + i);
 			//loop through the train level data for leg(s) of each trip
 			for(var j = 0; j < tripsArray[i].length; j++) {
 				var tripLeg = $("<div>");
-				tripLeg.addClass("trip-leg");
-				console.log("Leg " + j);
-				//appends the name of the train (final dest.) to the trip leg
+				//access full name of the train (final station dest.)
+				var finalTrainDest = tripsArray[i][j][2];
+				finalTrainDest = convertStationAbbr(finalTrainDest);
+				//access origin station full name for trip leg
+				var legOrigin = tripsArray[i][j][0];
+				legOrigin = convertStationAbbr(legOrigin);
+				//access destination station full name for trip leg
+				var legDest = tripsArray[i][j][1];
+				legDest = convertStationAbbr(legDest);
+				//append arrival time for trip leg origin train
 				tripLeg.append(tripsArray[i][j][3]+" ");
-				tripLeg.append(tripsArray[i][j][2]+" "+"Train"+"<br>");
-				console.log("finalTrainDest: " + tripsArray[i][j][2]);
-				tripLeg.append(tripsArray[i][j][0]+"--->");
-				console.log("legOrigin:      " + tripsArray[i][j][0]);
-				tripLeg.append(tripsArray[i][j][1]+" ");
-				console.log("legDest:        " + tripsArray[i][j][1]);
-				console.log("");
+				//append final train destination
+				tripLeg.append(finalTrainDest+" "+"Train"+"<br>");
+				// append origin leg
+				tripLeg.append(legOrigin+"--->");
+				// append destination leg
+				tripLeg.append(legDest+" ");
+				//append trip leg(s) to trip option div
 				tripOption.append(tripLeg);
+				//append all trip plan data to HTML
 				$("#trip-plan").append(tripOption);
 			}
 		}
@@ -261,6 +269,15 @@ $( document ).ready(function() {
 		}
 	};
 
+	//function to look up a train name abbreviation and access its display name
+	//ajax calls return train abbrv. necessary to convert for logMyTrips & displayRealTime functions
+	function convertStationAbbr(abbr) {
+		//look up station abbr in the abbr array and save its index
+		var abbrIdx = $.inArray(abbr, stationAbbrArray);
+		//get full name at the same index as abbreviation
+		var fullName = stationNameArray[abbrIdx];
+		return fullName;
+	};
 /*
 // api call to bart for all stops on every line (don't need for xfer but might need for upstreaming)
 //array containing names of all 12 routes - primarily for organization/maybe for displaying name of line
