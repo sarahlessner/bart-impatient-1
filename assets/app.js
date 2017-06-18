@@ -114,7 +114,7 @@ $( document ).ready(function() {
 
 	function getTripPlan() {
 
-		var queryURL = "https:api.bart.gov/api/sched.aspx?cmd=depart&orig="+originStation+"&dest="+destinationStation+"&time="+myTime+"&key=ZVZV-PH5D-9W3T-DWE9&b=2&a=2&l=1&json=y";
+		var queryURL = "https://api.bart.gov/api/sched.aspx?cmd=depart&orig="+originStation+"&dest="+destinationStation+"&time="+myTime+"&key=ZVZV-PH5D-9W3T-DWE9&b=2&a=2&l=1&json=y";
 		
 		$.ajax({
 			  // data: {
