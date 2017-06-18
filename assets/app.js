@@ -68,20 +68,12 @@ $( document ).ready(function() {
 		$("#am-pm").toggle();
 		$("#time-input").toggle();
 	});
-	
-	// $(document).on("keypress", "#time-input", function(){
-	// 	if ($(this).val()) {
-	// 		$("#am-pm").show();
-	// 	}
-	// 	else {
-	// 		$("#am-pm").hide();
-	// 	}
-	// }); 
 
 	//on click for submit button
 	$("#addTrainBtn").on("click", function(){
 		event.preventDefault();
 		//stores the "abbr" for the selected stations
+		$("#trip-plan").empty();
 		originStation = $("#origin-list").val();
 		destinationStation = $("#destination-list").val();
 		//gets time entry values
@@ -147,10 +139,12 @@ $( document ).ready(function() {
 		    			var legOrigin = myTrip.leg['@origin'];
 		    			var legDest = myTrip.leg['@destination'];
 		    			var finalTrainDest = myTrip.leg['@trainHeadStation'];
+		    			var legOriginTime = myTrip.leg['@origTimeMin'];
+		    			console.log("LEG ORIGIN", legOriginTime);
 		    			var load = myTrip.leg['@load'];
 		    			// console.log("trip origin:", legOrigin, "trip destination:", legDest, "final destination:", finalTrainDest);
 			    		// console.log("finalDest", finalDest);
-			    		var myLeg = [legOrigin, legDest, finalTrainDest];
+			    		var myLeg = [legOrigin, legDest, finalTrainDest, legOriginTime];
 			    		legsArray.push(myLeg);
 		    		}
 		    		//else a transfer is required ("leg" is an array of objects)
@@ -159,11 +153,12 @@ $( document ).ready(function() {
 			    			var legOrigin = myTrip.leg[j]['@origin'];
 			    			var legDest = myTrip.leg[j]['@destination'];
 			    			var finalTrainDest = myTrip.leg[j]['@trainHeadStation'];
+			    			var legOriginTime = myTrip.leg[j]['@origTimeMin'];
 			    			var load = myTrip.leg['@load'];
 			    			// console.log("trip origin:", legOrigin, "trip destination:", legDest, "final destination:", finalTrainDest);
 			    		// console.log("finalDest", finalDest);
 
-				    		var myLeg = [legOrigin, legDest, finalTrainDest];
+				    		var myLeg = [legOrigin, legDest, finalTrainDest, legOriginTime];
 				    		legsArray.push(myLeg);
 
 			    		}
@@ -224,14 +219,26 @@ $( document ).ready(function() {
 		console.log("logMyTrips");
 		//loop through all of the trip plans based on users origin/dest
 		for(var i = 0; i < tripsArray.length; i++){
+			//creates a div element for each trip option
+			var tripOption = $("<div>");
+			tripOption.addClass("trip-option");
 			console.log("Trip Option " + i);
 			//loop through the train level data for leg(s) of each trip
 			for(var j = 0; j < tripsArray[i].length; j++) {
+				var tripLeg = $("<div>");
+				tripLeg.addClass("trip-leg");
 				console.log("Leg " + j);
-				console.log("legOrigin:      " + tripsArray[i][j][0]);
-				console.log("legDest:        " + tripsArray[i][j][1]);
+				//appends the name of the train (final dest.) to the trip leg
+				tripLeg.append(tripsArray[i][j][3]+" ");
+				tripLeg.append(tripsArray[i][j][2]+" "+"Train"+"<br>");
 				console.log("finalTrainDest: " + tripsArray[i][j][2]);
+				tripLeg.append(tripsArray[i][j][0]+"--->");
+				console.log("legOrigin:      " + tripsArray[i][j][0]);
+				tripLeg.append(tripsArray[i][j][1]+" ");
+				console.log("legDest:        " + tripsArray[i][j][1]);
 				console.log("");
+				tripOption.append(tripLeg);
+				$("#trip-plan").append(tripOption);
 			}
 		}
 	};
