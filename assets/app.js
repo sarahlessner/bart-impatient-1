@@ -288,8 +288,12 @@ $( document ).ready(function() {
 				//store text of each alert
 				var bsa = response.root.bsa[i].description['#cdata-section'];
 				var timeOfAlert = response.root.bsa[i].posted;
-				console.log(timeOfAlert, bsa);
-				$("#service-advisories").append(timeOfAlert+"<br>", bsa);
+					if ((timeOfAlert === undefined) || (bsa === "No delays reported.")) {
+					$("#service-advisories").empty();
+					}	
+					else {
+					$("#service-advisories").append(timeOfAlert+"<br>", bsa);
+					}
 				}
 			});
 	};
