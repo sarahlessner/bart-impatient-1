@@ -150,7 +150,7 @@ $( document ).ready(function() {
 			    			var legDest = myTrip.leg[j]['@destination'];
 			    			var finalTrainDest = myTrip.leg[j]['@trainHeadStation'];
 			    			var legOriginTime = myTrip.leg[j]['@origTimeMin'];
-			    			var load = myTrip.leg['@load'];
+			    			var load = myTrip.leg[j]['@load'];
 			    			// console.log("trip origin:", legOrigin, "trip destination:", legDest, "final destination:", finalTrainDest);
 			    		// console.log("finalDest", finalDest);
 
