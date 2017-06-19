@@ -273,33 +273,33 @@ $( document ).ready(function() {
 		var fullName = stationNameArray[abbrIdx];
 		return fullName;
 	};
-/*
+
 // api call to bart for all stops on every line (don't need for xfer but might need for upstreaming)
 //array containing names of all 12 routes - primarily for organization/maybe for displaying name of line
 	// var routeNamesArray = [];
 	// //multi-dimensional array containing lists of stations on the 12 routes 
 	// var routeStationListsArray = [];
-function stationsByLine() {
+// function stationsByLine() {
 
-	var queryURL = "https://api.bart.gov/api/route.aspx?cmd=routeinfo&route=all&key=ZVZV-PH5D-9W3T-DWE9&json=y";
+// 	var queryURL = "https://api.bart.gov/api/route.aspx?cmd=routeinfo&route=all&key=ZVZV-PH5D-9W3T-DWE9&json=y";
 
-	$.ajax({
-		url: queryURL,
-		method: "GET"
-	}).done(function(response) {
-		//loop through number of routes and pull route names and stations
-		for (var k = 0; k < response.root.routes.route.length; k++) {
-			var route = response.root.routes.route[k].name;
-			var stationsOnRoute = response.root.routes.route[k].config.station;
-			//push route names to array
-			routeNamesArray.push(route);
-			//push lists of stations on routes to multi-dimensional array
-			routeStationListsArray.push(stationsOnRoute);
-		}
-		// console.log(routeNamesArray, routeStationListsArray);
-	});    	
+// 	$.ajax({
+// 		url: queryURL,
+// 		method: "GET"
+// 	}).done(function(response) {
+// 		//loop through number of routes and pull route names and stations
+// 		for (var k = 0; k < response.root.routes.route.length; k++) {
+// 			var route = response.root.routes.route[k].name;
+// 			var stationsOnRoute = response.root.routes.route[k].config.station;
+// 			//push route names to array
+// 			routeNamesArray.push(route);
+// 			//push lists of stations on routes to multi-dimensional array
+// 			routeStationListsArray.push(stationsOnRoute);
+// 		}
+// 		// console.log(routeNamesArray, routeStationListsArray);
+// 	});    	
 
-};
+// };
 
 // Youtube API CODE
 
