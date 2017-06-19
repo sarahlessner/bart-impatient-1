@@ -1,8 +1,7 @@
 $( document ).ready(function() {
 
 	displayStations();
-	//TODO if you have time: service advisory API https://api.bart.gov/api/bsa.aspx?cmd=bsa&key=ZVZV-PH5D-9W3T-DWE9&date=today&json=y
-		//determine how to tell if there is not a service advisory so that nothing will display
+	serviceAdvisory();
 	//array containining ALL stations in BART system
 	var stationNameArray = [];
 	var stationName = "";
@@ -18,7 +17,7 @@ $( document ).ready(function() {
 	var realTimeArray = [];
 	//default to checking current time but here if user inputs a time. format: (time=h:mm+am/pm)
 	var myTime;
-	//array with 5 load values - will pull load number 0-4 from API and access this array at load# idx
+	//array for train crowding info will use load number 0-4 from API and access this array at idx of load #
 	//0 load from bart means load info not available
 	var loadArray = ["unavailable", "light","normal","heavy","packed"];
 
@@ -27,32 +26,30 @@ $( document ).ready(function() {
 	function displayStations() {
 		var queryURL = "https://api.bart.gov/api/stn.aspx?cmd=stns&key=ZVZV-PH5D-9W3T-DWE9&json=y";
 
-		    $.ajax({
-		      url: queryURL,
-		      method: "GET"
-		    }).done(function(response) {
+			$.ajax({
+				url: queryURL,
+				method: "GET"
+				}).done(function(response) {
 
-		    //loop through stations and push "name" and "abbr" to arrays for user dropdown lists
-		    	for (var i = 0; i < response.root.stations.station.length; i++) {
-		    		stationName = response.root.stations.station[i].name;
-		    		stationAbbr = response.root.stations.station[i].abbr;
-		    		stationNameArray.push(stationName);
-		    		stationAbbrArray.push(stationAbbr);
-		    		//append station list to <ul>origin list
-		    		originList = $("<option>");
-		    		originList.addClass("origin-selection");
-		    		originList.text(stationName);
-		    		originList.attr("value", stationAbbr);
-		    		$("#origin-list").append(originList);
-		    		//append station list to <ul>destination list
-		    		destList = $("<option>");
-		    		destList.addClass("destination-selection");
-		    		destList.text(stationName);
-		    		destList.attr("value", stationAbbr);
-		    		$("#destination-list").append(destList);
-
-		    	};
-
+			    //loop through stations and push "name" and "abbr" to arrays for user dropdown lists
+				for (var i = 0; i < response.root.stations.station.length; i++) {
+					stationName = response.root.stations.station[i].name;
+					stationAbbr = response.root.stations.station[i].abbr;
+					stationNameArray.push(stationName);
+					stationAbbrArray.push(stationAbbr);
+					//append station list to <ul>origin list
+					originList = $("<option>");
+					originList.addClass("origin-selection");
+					originList.text(stationName);
+					originList.attr("value", stationAbbr);
+					$("#origin-list").append(originList);
+					//append station list to <ul>destination list
+					destList = $("<option>");
+					destList.addClass("destination-selection");
+					destList.text(stationName);
+					destList.attr("value", stationAbbr);
+					$("#destination-list").append(destList);
+				};
 			});
 	};
 
@@ -98,7 +95,6 @@ $( document ).ready(function() {
 				alert("Please enter time in h:mm format");
 			}
 		}
-
 		getTripPlan();
 		realTime();
 	});
@@ -118,48 +114,52 @@ $( document ).ready(function() {
 			  // data: {
 			  // 	cmd: 'depart',
 			  // 	orig: originStation,
-			  //	time: time,
-			  //	b: 0,
-			  //	a: 3,
+			  //	dest: destinationStation,
+			  //	time: myTime,
+			  //	key: 'ZVZV-PH5D-9W3T-DWE9',
+			  //	b: 1,
+			  //	a: 2,
+			  //	l: 1,
+			  //	json: 'y'
 			  // }
-		      url: queryURL,
-		      method: "GET"
-		    }).done(function(response) {
+			url: queryURL,
+			method: "GET"
+			}).done(function(response) {
 
-		    	tripsArray = [];
-		    	//for each available route at the station		    	
-		    	for (i = 0; i < response.root.schedule.request.trip.length; i++) {
-		    		//all trip options
-		    		var myTrip = response.root.schedule.request.trip[i];
-		    		//array to store leg or legs of trips
-		    		var legsArray = [];
-		    		//if the trip plan does not involve a transfer ("leg" is just an object)
-		    		if(myTrip.leg.length === undefined) {
-		    			var legOrigin = myTrip.leg['@origin'];
-		    			var legDest = myTrip.leg['@destination'];
-		    			var finalTrainDest = myTrip.leg['@trainHeadStation'];
-		    			var legOriginTime = myTrip.leg['@origTimeMin'];
-		    			var load = myTrip.leg['@load'];
-			    		var myLeg = [legOrigin, legDest, finalTrainDest, legOriginTime, load];
-			    		legsArray.push(myLeg);
-		    		}
-		    		//else a transfer is required ("leg" is an array of objects)
-		    		else {
-			    		for (j = 0; j < myTrip.leg.length; j++) {
-			    			var legOrigin = myTrip.leg[j]['@origin'];
-			    			var legDest = myTrip.leg[j]['@destination'];
-			    			var finalTrainDest = myTrip.leg[j]['@trainHeadStation'];
-			    			var legOriginTime = myTrip.leg[j]['@origTimeMin'];
-			    			var load = myTrip.leg[j]['@load'];
-			    			// console.log("trip origin:", legOrigin, "trip destination:", legDest, "final destination:", finalTrainDest);
-			    		// console.log("finalDest", finalDest);
+				tripsArray = [];
+				//for each available route at the station		    	
+				for (i = 0; i < response.root.schedule.request.trip.length; i++) {
+					//all trip options
+					var myTrip = response.root.schedule.request.trip[i];
+					//array to store leg or legs of trips
+					var legsArray = [];
+					//if the trip plan does not involve a transfer ("leg" is just an object)
+					if(myTrip.leg.length === undefined) {
+						var legOrigin = myTrip.leg['@origin'];
+						var legDest = myTrip.leg['@destination'];
+						var finalTrainDest = myTrip.leg['@trainHeadStation'];
+						var legOriginTime = myTrip.leg['@origTimeMin'];
+						var load = myTrip.leg['@load'];
+						var myLeg = [legOrigin, legDest, finalTrainDest, legOriginTime, load];
+						legsArray.push(myLeg);
+					}
+					//else a transfer is required ("leg" is an array of objects)
+					else {
+						for (j = 0; j < myTrip.leg.length; j++) {
+							var legOrigin = myTrip.leg[j]['@origin'];
+							var legDest = myTrip.leg[j]['@destination'];
+							var finalTrainDest = myTrip.leg[j]['@trainHeadStation'];
+							var legOriginTime = myTrip.leg[j]['@origTimeMin'];
+							var load = myTrip.leg[j]['@load'];
+							// console.log("trip origin:", legOrigin, "trip destination:", legDest, "final destination:", finalTrainDest);
+							// console.log("finalDest", finalDest);
 
-				    		var myLeg = [legOrigin, legDest, finalTrainDest, legOriginTime, load];
-				    		legsArray.push(myLeg);
-			    		}
-		    		}
-		    		tripsArray.push(legsArray);
-		    	};
+							var myLeg = [legOrigin, legDest, finalTrainDest, legOriginTime, load];
+							legsArray.push(myLeg);
+						}
+					}
+				tripsArray.push(legsArray);
+				};
 				logMyTrips();
 		});
 	};
@@ -170,34 +170,34 @@ $( document ).ready(function() {
 		var queryURL = "https://api.bart.gov/api/etd.aspx?cmd=etd&orig="+originStation+"&key=ZVZV-PH5D-9W3T-DWE9&json=y";
 
 		$.ajax({
-		      url: queryURL,
-		      method: "GET"
+			url: queryURL,
+			method: "GET"
 			}).done(function(response) {
-		    	realTimeArray = [];
-		    	//get all real time data at the origin station
-		    	var allRealTime = response.root.station[0];
-		    	// console.log("all real time", allRealTime);
-		    	var etd = allRealTime.etd;
-		    	//loop through ETD info
-		    	for (i = 0; i < etd.length; i++) {
-		    		var etdArray = [];
-		    		//get train line (final dest) and abbrev for all trains
-		    		var allRealTimeDest = etd[i].destination;
-		    		var allRealTimeAbbr = etd[i].abbreviation;
-		    		var allEstimates = etd[i].estimate;
-		    		etdArray.push(allRealTimeDest, allRealTimeAbbr);
-		    		//loop through estimate information for all specific trains arriving
-		    		for (j = 0; j < allEstimates.length; j++) {
-		    			var minutesToArrive = allEstimates[j].minutes;
-		    			var trainLength = allEstimates[j]['length'];
-		    			var lineColor = allEstimates[j].color;
-		    			// console.log("minutesToArrive", minutesToArrive, "trainLength", trainLength, "lineColor", lineColor);
-		    			var estimatesArray = [minutesToArrive,trainLength,lineColor];
-		    			etdArray.push(estimatesArray);
-		    		}
-		    		realTimeArray.push(etdArray);
-		    	};	 
-		    displayRealTime();	
+				realTimeArray = [];
+				//get all real time data at the origin station
+				var allRealTime = response.root.station[0];
+				// console.log("all real time", allRealTime);
+				var etd = allRealTime.etd;
+				//loop through ETD info
+				for (i = 0; i < etd.length; i++) {
+					var etdArray = [];
+					//get train line (final dest) and abbrev for all trains
+					var allRealTimeDest = etd[i].destination;
+					var allRealTimeAbbr = etd[i].abbreviation;
+					var allEstimates = etd[i].estimate;
+					etdArray.push(allRealTimeDest, allRealTimeAbbr);
+					//loop through estimate information for all specific trains arriving
+					for (j = 0; j < allEstimates.length; j++) {
+						var minutesToArrive = allEstimates[j].minutes;
+						var trainLength = allEstimates[j]['length'];
+						var lineColor = allEstimates[j].color;
+						// console.log("minutesToArrive", minutesToArrive, "trainLength", trainLength, "lineColor", lineColor);
+						var estimatesArray = [minutesToArrive,trainLength,lineColor];
+						etdArray.push(estimatesArray);
+					}
+					realTimeArray.push(etdArray);
+				};	 
+				displayRealTime();	
 			});
 	};
 
@@ -274,32 +274,49 @@ $( document ).ready(function() {
 		return fullName;
 	};
 
-// api call to bart for all stops on every line (don't need for xfer but might need for upstreaming)
-//array containing names of all 12 routes - primarily for organization/maybe for displaying name of line
-	// var routeNamesArray = [];
-	// //multi-dimensional array containing lists of stations on the 12 routes 
-	// var routeStationListsArray = [];
-// function stationsByLine() {
+	//service advisory API 
+	function serviceAdvisory()	{
 
-// 	var queryURL = "https://api.bart.gov/api/route.aspx?cmd=routeinfo&route=all&key=ZVZV-PH5D-9W3T-DWE9&json=y";
+		var queryURL = "https://api.bart.gov/api/bsa.aspx?cmd=bsa&key=ZVZV-PH5D-9W3T-DWE9&date=today&json=y";
 
-// 	$.ajax({
-// 		url: queryURL,
-// 		method: "GET"
-// 	}).done(function(response) {
-// 		//loop through number of routes and pull route names and stations
-// 		for (var k = 0; k < response.root.routes.route.length; k++) {
-// 			var route = response.root.routes.route[k].name;
-// 			var stationsOnRoute = response.root.routes.route[k].config.station;
-// 			//push route names to array
-// 			routeNamesArray.push(route);
-// 			//push lists of stations on routes to multi-dimensional array
-// 			routeStationListsArray.push(stationsOnRoute);
-// 		}
-// 		// console.log(routeNamesArray, routeStationListsArray);
-// 	});    	
+		$.ajax({
+			url: queryURL,
+			method: "GET"
+			}).done(function(response) {
+				//loop through available BSA
+				for (var i = 0; i < response.root.bsa.length; i++) {
+				//store text of each alert
+				var bsa = response.root.bsa[i].description['#cdata-section'];
+				var timeOfAlert = response.root.bsa[i].posted;
+				console.log(timeOfAlert, bsa);
+				$("#service-advisories").append(timeOfAlert+"<br>", bsa);
+				}
+			});
+	};
 
-// };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Youtube API CODE
 
