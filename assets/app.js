@@ -355,7 +355,7 @@ $(document).ready(function() {
                         jQuery.each( obj, function( key, value ) {
                             sqValue.push(value[0]);
                         });
-                        response( sqValue);
+                        response(sqValue);
                     }
                 });
               },
