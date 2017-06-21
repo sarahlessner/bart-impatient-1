@@ -20,6 +20,7 @@ $( document ).ready(function() {
 	//get load number 0-4 from API and access load array at idx of load #
 	//0 load from bart means load info not available
 	var loadArray = ["unavailable", "light","normal","heavy","packed"];
+	var bartKey = 'ZVZV-PH5D-9W3T-DWE9';
 
 
 	//function to pull station lists from BART API and push to arrays
@@ -27,6 +28,11 @@ $( document ).ready(function() {
 		var queryURL = "https://api.bart.gov/api/stn.aspx?cmd=stns&key=ZVZV-PH5D-9W3T-DWE9&json=y";
 
 			$.ajax({
+				// data: {
+				// 	cmd:'stns',
+				// 	key: bartKey,
+				// 	json: 'y'
+				// },
 				url: queryURL,
 				method: "GET"
 				}).done(function(response) {
@@ -109,20 +115,20 @@ $( document ).ready(function() {
 	//function calling BARTS schedule info API to get a trip plan based on origin/dest
 	function getTripPlan() {
 
-		var queryURL = "https://api.bart.gov/api/sched.aspx?cmd=depart&orig="+originStation+"&dest="+destinationStation+"&time="+myTime+"&key=ZVZV-PH5D-9W3T-DWE9&b=1&a=2&l=1&json=y";
+		var queryURL = "https://api.bart.gov/api/sched.aspx";
 		
 		$.ajax({
-			  // data: {
-			  // 	cmd: 'depart',
-			  // 	orig: originStation,
-			  //	dest: destinationStation,
-			  //	time: myTime,
-			  //	key: 'ZVZV-PH5D-9W3T-DWE9',
-			  //	b: 1,
-			  //	a: 2,
-			  //	l: 1,
-			  //	json: 'y'
-			  // }
+			data: {
+			  	cmd: 'depart',
+			  	orig: originStation,
+			  	dest: destinationStation,
+			  	time: myTime,
+			  	key: bartKey,
+			  	b: 1,
+			  	a: 2,
+			  	l: 1,
+			  	json: 'y'
+			},
 			url: queryURL,
 			method: "GET"
 			}).done(function(response) {
@@ -168,9 +174,15 @@ $( document ).ready(function() {
 	//function to call BART API for real time train data
 	function realTime() {
 
-		var queryURL = "https://api.bart.gov/api/etd.aspx?cmd=etd&orig="+originStation+"&key=ZVZV-PH5D-9W3T-DWE9&json=y";
+		var queryURL = "https://api.bart.gov/api/etd.aspx";
 
 		$.ajax({
+			data: {
+				cmd: 'etd',
+				orig: originStation,
+				key: bartKey,
+				json: 'y'
+			},
 			url: queryURL,
 			method: "GET"
 			}).done(function(response) {
@@ -282,6 +294,11 @@ $( document ).ready(function() {
 		var queryURL = "https://api.bart.gov/api/bsa.aspx?cmd=bsa&key=ZVZV-PH5D-9W3T-DWE9&date=today&json=y";
 
 		$.ajax({
+			// data: {
+			// 	cmd: 'bsa',
+			// 	key: bartKey,
+			// 	json: 'y'
+			// },
 			url: queryURL,
 			method: "GET"
 			}).done(function(response) {
