@@ -84,7 +84,7 @@ $( document ).ready(function() {
 		//checks if user entered a time without selecting "AM" or "PM"
 		if ((timeInput != "") && (ampm === "")) {
 			//we're not allowed to use alerts so we'll have to do something else but this is here to test
-			alert("please clear your time entry or select am/pm");
+			bootbox.alert("please clear your time entry or select am/pm");
 			return;
 		}
 		//sets time to "now" if the user does not enter a time
@@ -99,7 +99,7 @@ $( document ).ready(function() {
 			}
 			else {
 				//need to alert with different method
-				alert("Please enter time in h:mm format");
+				bootbox.alert("Please enter time in h:mm format");
 			}
 		}
 		getTripPlan();
