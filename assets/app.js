@@ -1,11 +1,11 @@
 $( document ).ready(function() {
-
+	//when page loads call function getting stations for user selection and any advisories
 	displayStations();
 	serviceAdvisory();
-	//array containining ALL stations in BART system
+	//array containining ALL stations by name in BART system
 	var stationNameArray = [];
 	var stationName = "";
-	//array containing ALL stations abbreviations - API calls use abbr
+	//array containing ALL stations by abbr - API calls use abbr
 	var stationAbbrArray = [];
 	var stationAbbr = "";
 	//store abbreviations from stationAbbrArray that correspond to user selections for origin/dest stations
@@ -15,9 +15,9 @@ $( document ).ready(function() {
 	var tripsArray = [];
 	//multidimensional array storing data from realTime function
 	var realTimeArray = [];
-	//default to checking current time but here if user inputs a time. format: (time=h:mm+am/pm)
+	//captures time if user inputs one. defaults to parameter "now"
 	var myTime;
-	//array for train crowding info will use load number 0-4 from API and access this array at idx of load #
+	//get load number 0-4 from API and access load array at idx of load #
 	//0 load from bart means load info not available
 	var loadArray = ["unavailable", "light","normal","heavy","packed"];
 
@@ -73,7 +73,7 @@ $( document ).ready(function() {
 		originStation = $("#origin-list").val();
 		destinationStation = $("#destination-list").val();
 		//gets time entry values
-		ampm = $("#am-pm").val();
+		var ampm = $("#am-pm").val();
 		var timeInput = $("#time-input").val();
 		//checks if user entered a time without selecting "AM" or "PM"
 		if ((timeInput != "") && (ampm === "")) {
@@ -92,6 +92,7 @@ $( document ).ready(function() {
 			myTime = timeInput+ampm;
 			}
 			else {
+				//need to alert with different method
 				alert("Please enter time in h:mm format");
 			}
 		}
@@ -160,7 +161,7 @@ $( document ).ready(function() {
 					}
 				tripsArray.push(legsArray);
 				};
-				logMyTrips();
+				displayTrips();
 		});
 	};
 
@@ -202,7 +203,7 @@ $( document ).ready(function() {
 	};
 
 	//function to display data from getTripPlan function
-	function logMyTrips() {
+	function displayTrips() {
 		// console.log("logMyTrips");
 		//loop through all of the trip plans based on users origin/dest
 		for(var i = 0; i < tripsArray.length; i++){
@@ -215,10 +216,11 @@ $( document ).ready(function() {
 				var tripLeg = $("<div>");
 				//access full name of the train (final station dest.)
 				var finalTrainDest = tripsArray[i][j][2];
+				//reset to result of function to convert abbr to full name
 				finalTrainDest = convertStationAbbr(finalTrainDest);
 				//load value
 				var loadValue = tripsArray[i][j][4];
-				console.log("load value", loadValue);
+				// console.log("load value", loadValue);
 				loadValue = loadArray[loadValue];
 				//access origin station full name for trip leg
 				var legOrigin = tripsArray[i][j][0];
@@ -297,6 +299,7 @@ $( document ).ready(function() {
 				}
 			});
 	};
+
 
 
 
