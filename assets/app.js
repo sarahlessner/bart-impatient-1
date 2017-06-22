@@ -444,7 +444,7 @@ $( document ).ready(function() {
 
     $(document).on("click", ".vidImg", function(event){
     	event.preventDefault();
-    	$("#hyv-watch-related").empty();
+    	// $("#hyv-watch-related").empty();
     	console.log("inside click handler");
     	var $this = $(this);
     	console.log("this", $this);
