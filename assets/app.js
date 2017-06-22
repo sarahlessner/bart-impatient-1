@@ -386,7 +386,7 @@ $( document ).ready(function() {
         var sqValue = [];
         jQuery.ajax({
             type: "POST",
-            url: "http://suggestqueries.google.com/complete/search?hl=en&ds=yt&client=youtube&hjson=t&cp=1",
+            url: "https://suggestqueries.google.com/complete/search?hl=en&ds=yt&client=youtube&hjson=t&cp=1",
             dataType: 'json',
             data: jQuery.extend({
                 q: request.term
@@ -444,13 +444,13 @@ $( document ).ready(function() {
 
     $(document).on("click", ".vidImg", function(event){
     	event.preventDefault();
-    	// $("#hyv-watch-related").empty();
+    	$("#hyv-watch-related").empty();
     	console.log("inside click handler");
     	var $this = $(this);
     	console.log("this", $this);
     	var vid = $this.attr("data-vid");
     	console.log("vid", vid);
-    	var vidLink = 'https://www.youtube.com/embed/' + vid;
+    	var vidLink = "https://www.youtube.com/embed/" + vid;
     	// $('<iframe width="560" height="315" frameborder="0" allowfullscreen></iframe>').attr('src', vidLink).appendTo('#fullVideo');
     	$('#fullVideo').html('<iframe src="' + vidLink + '" width="560" height="315" frameborder="0" allowfullscreen></iframe>');
 	});
