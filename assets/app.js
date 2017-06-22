@@ -224,11 +224,11 @@ $( document ).ready(function() {
 							var estimatesArray = [minutesToArrive,trainLength,lineColor];
 							etdArray.push(estimatesArray);
 						}
-						realTimeArray.push(etdArray);
-						displayRealTime();
+					realTimeArray.push(etdArray);	
 					};
-				};	 
-					
+				};
+				
+				displayRealTime();	 	
 			});
 	};
 
