@@ -454,7 +454,6 @@ $( document ).ready(function() {
     	// $('<iframe width="560" height="315" frameborder="0" allowfullscreen></iframe>').attr('src', vidLink).appendTo('#fullVideo');
     	$('#fullVideo').html('<iframe src="' + vidLink + '" width="560" height="315" frameborder="0" allowfullscreen></iframe>');
 	});
-
 });	
 
 
