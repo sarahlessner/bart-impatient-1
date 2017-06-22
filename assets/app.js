@@ -69,12 +69,19 @@
 		$("#time-input").toggle();
 	});
 
+	//hide youtube, train schedules as default
+	$("#youtube").hide();
+	$("#real-time-container").hide();
+	$("#trip-plan-container").hide();
+
 	//on click for submit button
 	$("#addTrainBtn").on("click", function(){
 		event.preventDefault();
 		//empty trip-plan and real-time divs
 		$("#trip-plan").empty();
 		$("#real-time").empty();
+		$("#hyv-watch-related").empty();
+		$('#fullVideo').empty();
 		//capture station entry values (abbr version of train or station name)
 		originStation = $("#origin-list").val();
 		destinationStation = $("#destination-list").val();
@@ -104,6 +111,9 @@
 		}
 		getTripPlan();
 		realTime();
+		$("#youtube").show();
+		$("#real-time-container").show();
+		$("#trip-plan-container").show();
 	});
 
 	//function to validate time input 
