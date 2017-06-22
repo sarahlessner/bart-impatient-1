@@ -361,7 +361,7 @@ $( document ).ready(function() {
 
 
 
-// Youtube API CODE
+	// Youtube API CODE
 
 	// Onclick event for Next and Previous buttons; when pressed, function youtubeAPIcall 
 	//	will execute and grab the next set of videos
