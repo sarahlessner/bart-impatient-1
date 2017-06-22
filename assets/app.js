@@ -112,7 +112,6 @@ $( document ).ready(function() {
 		getTripPlan();
 		realTime();
 		$("#youtube").show();
-		$("#real-time-container").show();
 		$("#trip-plan-container").show();
 	});
 
@@ -203,24 +202,33 @@ $( document ).ready(function() {
 				var etd = allRealTime.etd;
 				//loop through ETD info
 				for (i = 0; i < etd.length; i++) {
-					var etdArray = [];
-					//get train line (final dest) and abbrev for all trains
-					var allRealTimeDest = etd[i].destination;
-					var allRealTimeAbbr = etd[i].abbreviation;
-					var allEstimates = etd[i].estimate;
-					etdArray.push(allRealTimeDest, allRealTimeAbbr);
-					//loop through estimate information for all specific trains arriving
-					for (j = 0; j < allEstimates.length; j++) {
-						var minutesToArrive = allEstimates[j].minutes;
-						var trainLength = allEstimates[j]['length'];
-						var lineColor = allEstimates[j].color;
-						// console.log("minutesToArrive", minutesToArrive, "trainLength", trainLength, "lineColor", lineColor);
-						var estimatesArray = [minutesToArrive,trainLength,lineColor];
-						etdArray.push(estimatesArray);
+					//if there is no real time data 
+					if (etd.length === undefined) {
+						//do nothing, only want to show real time container if there's any real time to display
+						return;
 					}
-					realTimeArray.push(etdArray);
+					else {
+						$("#real-time-container").show();
+						var etdArray = [];
+						//get train line (final dest) and abbrev for all trains
+						var allRealTimeDest = etd[i].destination;
+						var allRealTimeAbbr = etd[i].abbreviation;
+						var allEstimates = etd[i].estimate;
+						etdArray.push(allRealTimeDest, allRealTimeAbbr);
+						//loop through estimate information for all specific trains arriving
+						for (j = 0; j < allEstimates.length; j++) {
+							var minutesToArrive = allEstimates[j].minutes;
+							var trainLength = allEstimates[j]['length'];
+							var lineColor = allEstimates[j].color;
+							// console.log("minutesToArrive", minutesToArrive, "trainLength", trainLength, "lineColor", lineColor);
+							var estimatesArray = [minutesToArrive,trainLength,lineColor];
+							etdArray.push(estimatesArray);
+						}
+						realTimeArray.push(etdArray);
+						displayRealTime();
+					};
 				};	 
-				displayRealTime();	
+					
 			});
 	};
 
@@ -423,7 +431,7 @@ $( document ).ready(function() {
 	        $("#pageTokenNext").val(data.nextPageToken);
 	        $("#pageTokenPrev").val(data.prevPageToken);
 	        $.each(items, function(index,e) {
-	            videoList = videoList + '<li class="hyv-video-list-item"><div class="hyv-content-wrapper"><a href="" class="hyv-content-link" title="'+e.snippet.title+'"><span class="title">'+e.snippet.title+'</span><span class="stat attribution">by <span>'+e.snippet.channelTitle+'</span></span></a></div><div class="hyv-thumb-wrapper"><a href="" class="hyv-thumb-link"><span class="hyv-simple-thumb-wrap"><img class="vidImg" data-vid=' + data.items[0].id.videoId + ' alt="'+e.snippet.title+'" src="'+e.snippet.thumbnails.default.url+'" width="120" height="90"></span></a></div></li>';
+	            videoList = videoList + '<li class="hyv-video-list-item"><div class="hyv-content-wrapper"><a href="" class="hyv-content-link" title="'+e.snippet.title+'"><span class="title">'+e.snippet.title+'</span><span class="stat attribution">by <span>'+e.snippet.channelTitle+'</span></span></a></div><div class="hyv-thumb-wrapper"><a href="" class="hyv-thumb-link"><span class="hyv-simple-thumb-wrap"><img class="vidImg" data-vid=' + data.items[index].id.videoId + ' alt="'+e.snippet.title+'" src="'+e.snippet.thumbnails.default.url+'" width="120" height="90"></span></a></div></li>';
 	        });
 	        $("#hyv-watch-related").html(videoList);
 	        // JSON Responce to display for user
@@ -436,6 +444,7 @@ $( document ).ready(function() {
 
     $(document).on("click", ".vidImg", function(event){
     	event.preventDefault();
+    	$("#hyv-watch-related").empty();
     	console.log("inside click handler");
     	var $this = $(this);
     	console.log("this", $this);
