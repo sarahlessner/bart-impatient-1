@@ -84,7 +84,7 @@
 		//checks if user entered a time without selecting "AM" or "PM"
 		if ((timeInput != "") && (ampm === "")) {
 			//we're not allowed to use alerts so we'll have to do something else but this is here to test
-			alert("please clear your time entry or select am/pm");
+			bootbox.alert("please clear your time entry or select am/pm");
 			return;
 		}
 		//sets time to "now" if the user does not enter a time
@@ -99,7 +99,7 @@
 			}
 			else {
 				//need to alert with different method
-				alert("Please enter time in h:mm format");
+				bootbox.alert("Please enter time in h:mm format");
 			}
 		}
 		getTripPlan();
@@ -241,17 +241,18 @@
 				var legDest = tripsArray[i][j][1];
 				legDest = convertStationAbbr(legDest);
 				//append arrival time for trip leg origin train
-				tripLeg.append(tripsArray[i][j][3]+" ");
-				//append final train destination
-				tripLeg.append(finalTrainDest+" "+"Train"+" / ");
+				tripLeg.append(tripsArray[i][j][3]+"  --  ");
 				//append train crowding(load) info
 				tripLeg.append("Train Crowding: "+loadValue+"<br>");
+				//append final train destination
+				tripLeg.append(finalTrainDest+" "+"Train"+" / ");
 				// append origin leg
-				tripLeg.append(legOrigin+"--->");
+				tripLeg.append(legOrigin+" ---> ");
 				// append destination leg
 				tripLeg.append(legDest+" ");
 				//append trip leg(s) to trip option div
 				tripOption.append(tripLeg);
+				// tripOption.append("<br>");
 				//append all trip plan data to HTML
 				$("#trip-plan").append(tripOption);
 			}
@@ -263,7 +264,7 @@
 		for (var i = 0; i < realTimeArray.length; i++) {
 			//create a div for each piece of ETD data
 			// var etd = $("<div>");
-			var etd = $("<div style='background-color: "+realTimeArray[i][2][2]+ "'>");
+			var etd = $("<div style='color: "+realTimeArray[i][2][2]+ "'>");
 			etd.addClass("etd-train");
 			etd.append(realTimeArray[i][0]+"<br>");
 			//looping through all train level estimate data for the origin station
@@ -307,6 +308,7 @@
 				//store text of each alert
 				var bsa = response.root.bsa[i].description['#cdata-section'];
 				var timeOfAlert = response.root.bsa[i].posted;
+				timeOfAlert.addClass("service-alert");
 					if ((timeOfAlert === undefined) || (bsa === "No delays reported.")) {
 					$("#service-advisories").empty();
 					}	

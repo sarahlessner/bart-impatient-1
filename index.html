@@ -31,9 +31,15 @@
 
 	
 	<!-- SERVICE ADVISORIES ID service-advisories -->
-	<div id="service-advisories">
-
-
+	<div class="container">
+		<div class="row">
+			<div class="alert-panel col-md-12">
+				<div id="service-advisories">
+					<div id="service-alert" class="floating"><p>BART is recovering from an earlier problem. There is a 20-minute delay on the San Francisco Line in the Pittsburg / Bay Point, Dublin / Pleasanton and Richmond directions due to an equipment problem on a train.
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 
 			
@@ -75,28 +81,66 @@
 				</div>
 			</div>
 		</div>
+	</div>
+
 
 
 	<!-- REAL TIME DATA - WILL DISPLAY ALL TRAINS AT ORIGIN STATION ID #real-time-->
-	<h3>ALL TRAINS ARRIVING AT STATION IN REAL TIME WILL GO HERE</h3>
-	<div id="real-time">
+	<div class="container">
+		<div class="row">
+			<div class="selection-panel col-md-12">
+
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title"><strong>Real Time Data</strong></h3>
+					</div>
+
+					<div class="panel-body">
+						<div id="real-time">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	
 	<!--real time data from JS will append here -->
 	</div>
 
 	<!--SCHEDULE DATA - WILL DISPLAY USERS TRIP PLANS #trip-plan -->
-	<h3>TRIP PLANNER OPTIONS BASED ON USER SELECTIONS WILL GO HERE</h3>
-	<div id="trip-plan">
+
+	<div class="container">
+		<div class="row">
+			<div class="selection-panel col-md-12">
+
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title"><strong>Train Schedule</strong></h3>
+					</div>
+
+					<div class="panel-body">
+						<div id="trip-plan">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 	
 	<!--schedule data from JS will append here -->
 	</div>
 
 	<!--YOUTUBE VIDEO #youtube-->
-	<h3>SPACE FOR YOUTUBE</h3>
-	<div id="youtube">
+
+	<div class="container">
+		<div class="row">
+			<div class="selection-panel col-md-12">
+
+				<h3>SPACE FOR YOUTUBE</h3>
+					<div id="youtube">
+
 	
 	<!--youtube video code from JS will append here -->
-	</div>
+					</div>
 
 		<div class="row-fluid">
 		        <main id="content" role="main" class="span12">
@@ -130,6 +174,11 @@
 		        </main>
 		    </div>
 
+		    </div>
+		</div>
+	</div>
+
+
 <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script src="assets/app.js"></script>
@@ -148,6 +197,10 @@ Before implementing the jQuery Ajax request for “YouTube autocomplete search s
  <script type="text/javascript" src="assets/underscore-min.js"></script>
  <script type="text/javascript" src="assets/backbone-min.js"></script>
  <script type="text/javascript" src="assets/pretty-json-min.js"></script>
+  <!-- bootbox needs to live below jquery/bootstrap -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+
+
  
 </body>
 </html>

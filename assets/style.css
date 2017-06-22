@@ -1,12 +1,16 @@
 
 #real-time,
 #trip-plan {
-	margin-top: 40px;
+	margin-top: 20px;
 }
 
 .etd-train,
 .trip-option {
 	border:1px solid black;
+}
+
+p {
+  font-family: 'Muli', sans-serif;
 }
 
 .promo {
@@ -46,7 +50,6 @@
   background: #4286f4;
   padding: 25px 0;
   position: relative;
-  z-index: 2;
   clear: right;
 }
 
@@ -92,5 +95,29 @@
   padding: 7px 15px 6px 15px;
 }
 
+.etd-train, .trip-option {
+  background-color: #e8eaea;
+  font-family: 'Muli', sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 12px;
+}
 
+.trip-option > div:nth-child(n+2) {
+   margin-top: 10px;
+}
+
+#service-alert {
+  border: none;
+  position: relative;
+  background-color: rgba(248, 69, 69, 0.2);
+  color: #cc0000;
+  font-size: 16px;
+  padding: 20px;
+
+}
+
+.alert-panel {
+  padding: 20px;
+}
 
