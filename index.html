@@ -149,6 +149,8 @@
 		                <div class="hyv-content-alignment">
 		                    <div id="hyv-page-content" class="" style="overflow:hidden;">
 		                        <div class="container-4">
+
+		                       		<!-- Create Input box and button to get full view of search box -->
 		                            <form action="" method="post" name="hyv-yt-search" id="hyv-yt-search">
 		                                <input type="search" name="hyv-search" id="hyv-search" placeholder="Search..." class="ui-autocomplete-input" autocomplete="off">
 		                                <button class="icon" id="hyv-searchBtn">Go</button>
@@ -164,6 +166,7 @@
 		                        <div id="hyv-watch-content" class="hyv-watch-main-col hyv-card hyv-card-has-padding">
 		                            <ul id="hyv-watch-related" class="hyv-video-list">
 		                            </ul>
+		                            <div id="fullVideo"></div>
 		                        </div>
 		                    </div>
 		                </div>
@@ -179,6 +182,10 @@
 <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script src="assets/app.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<!-- 3rd party dependencies for Youtube API
+Before implementing the jQuery Ajax request for “YouTube autocomplete search suggestions API”, we need to include jQuery framework and jQuery UI dependency --> 
 <script
  src="https://code.jquery.com/jquery-3.2.1.min.js"
  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
@@ -187,9 +194,12 @@
   src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"
   integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
   crossorigin="anonymous"></script>
- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ <script type="text/javascript" src="assets/underscore-min.js"></script>
+ <script type="text/javascript" src="assets/backbone-min.js"></script>
+ <script type="text/javascript" src="assets/pretty-json-min.js"></script>
   <!-- bootbox needs to live below jquery/bootstrap -->
  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+
 
  
 </body>
