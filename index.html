@@ -132,38 +132,41 @@
 	<div class="container">
 		<div class="row">
 			<div class="selection-panel col-md-12">
-					<div id="youtube">
-						<div class="row-fluid">
-					        <main id="content" role="main" class="span12">
-					            <!-- Begin Content -->
-					            <div id="hyv-page-container" style="clear:both;">
-					                <div class="hyv-content-alignment">
-					                    <div id="hyv-page-content" class="" style="overflow:hidden;">
-					                        <div class="container-4">
+					<div id="youtube" class="panel panel-primary">
+						<div class="panel-heading">
+							<h3 class="panel-title"><strong>Watch a Video</strong></h3>
+						</div>
+							<div class="row-fluid">
+						        <main id="content" role="main" class="span12 panel-body">
+						            <!-- Begin Content -->
+						            <div id="hyv-page-container" style="clear:both;">
+						                <div class="hyv-content-alignment">
+						                    <div id="hyv-page-content" class="" style="overflow:hidden;">
+						                        <div class="container-4">
 
-					                       		<!-- Create Input box and button to get full view of search box -->
-					                            <form action="" method="post" name="hyv-yt-search" id="hyv-yt-search">
-					                                <input type="search" name="hyv-search" id="hyv-search" placeholder="Search..." class="ui-autocomplete-input" autocomplete="off">
-					                                <button class="icon" id="hyv-searchBtn">Go</button>
-					                            </form>
-					                        </div>
-					                        <div>
-					                            <input type="hidden" id="pageToken" value="">
-					                            <div class="btn-group" role="group" aria-label="...">
-					                              <button type="button" id="pageTokenPrev" value="" class="btn btn-default">Prev</button>
-					                              <button type="button" id="pageTokenNext" value="" class="btn btn-default">Next</button>
-					                            </div>
-					                        </div>
-					                        <div id="hyv-watch-content" class="hyv-watch-main-col hyv-card hyv-card-has-padding">
-					                            <ul id="hyv-watch-related" class="hyv-video-list">
-					                            </ul>
-					                            <div id="fullVideo"></div>
-					                        </div>
-					                    </div>
-					                </div>
-					            </div>
-					        </main>
-				    	</div>
+						                       		<!-- Create Input box and button to get full view of search box -->
+						                            <form action="" method="post" name="hyv-yt-search" id="hyv-yt-search">
+						                                <input type="search" name="hyv-search" id="hyv-search" placeholder="Search..." class="ui-autocomplete-input" autocomplete="off">
+						                                <button class="icon" id="hyv-searchBtn">Go</button>
+						                            </form>
+						                        </div>
+						                        <div>
+						                            <input type="hidden" id="pageToken" value="">
+						                            <div class="btn-group" role="group" aria-label="...">
+						                              <button type="button" id="pageTokenPrev" value="" class="btn btn-default">Prev</button>
+						                              <button type="button" id="pageTokenNext" value="" class="btn btn-default">Next</button>
+						                            </div>
+						                        </div>
+						                        <div id="hyv-watch-content" class="hyv-watch-main-col hyv-card hyv-card-has-padding">
+						                            <ul id="hyv-watch-related" class="hyv-video-list">
+						                            </ul>
+						                            <div id="fullVideo"></div>
+						                        </div>
+						                    </div>
+						                </div>
+						            </div>
+						        </main>
+					    	</div>
 				   </div>
 		    </div>
 		</div>
