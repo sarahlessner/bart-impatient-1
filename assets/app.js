@@ -282,8 +282,13 @@ $( document ).ready(function() {
 		for (var i = 0; i < realTimeArray.length; i++) {
 			//create a div for each piece of ETD data
 			// var etd = $("<div>");
-			var etd = $("<div style='color: "+realTimeArray[i][2][2]+ "'>");
+			var etd = $("<div>");
 			etd.addClass("etd-train");
+			var colorBox = $("<div>");
+			colorBox.css({
+				'background-color': realTimeArray[i][2][2],
+			}).addClass("color-box");
+			etd.append(colorBox);
 			etd.append(realTimeArray[i][0]+"<br>");
 			//looping through all train level estimate data for the origin station
 			for (var j = 2; j < realTimeArray[i].length; j++) {
@@ -326,12 +331,14 @@ $( document ).ready(function() {
 				//store text of each alert
 				var bsa = response.root.bsa[i].description['#cdata-section'];
 				var timeOfAlert = response.root.bsa[i].posted;
-				timeOfAlert.addClass("service-alert");
+				if (timeOfAlert) { // if it is truthy
+					timeOfAlert.addClass("service-alert");
 					if ((timeOfAlert === undefined) || (bsa === "No delays reported.")) {
-					$("#service-advisories").empty();
-					}	
-					else {
-					$("#service-advisories").append(timeOfAlert+"<br>", bsa);
+						$("#service-advisories").empty();
+						}	
+						else {
+						$("#service-advisories").append(timeOfAlert+"<br>", bsa);
+						}
 					}
 				}
 			});
@@ -352,39 +359,40 @@ $( document ).ready(function() {
     });
     $("#hyv-searchBtn").on( "click", function( event ) {
         $('#fullVideo').empty();
-        $('#hyv-search').val('');
+        // $('#hyv-search').val('');
         youtubeApiCall();
         return false;
     });
 
-    // Function that will implement the YouTube search suggestions API
-    jQuery( "#hyv-search" ).autocomplete({
-      source: function( request, response ) {
-        //console.log(request.term);
-        var sqValue = [];
-        jQuery.ajax({
-            type: "POST",
-            url: "https://suggestqueries.google.com/complete/search?hl=en&ds=yt&client=youtube&hjson=t&cp=1",
-            dataType: 'json',
-            data: jQuery.extend({
-                q: request.term
-            }, {  }),
-            success: function(data){
-                console.log(data[1]);
-                obj = data[1];
-                jQuery.each( obj, function( key, value ) {
-                    sqValue.push(value[0]);
-                });
-                response(sqValue);
-            }
-        });
-      },
-      select: function( event, ui ) {
-        setTimeout( function () { 
-            youtubeApiCall();
-        }, 300);
-      }
-    });  
+    //note: the below function was not working but is living here to show the effort/attempt Val made and possibly work on in the future
+    // Function that will implement the YouTube search suggestions API 
+    // jQuery( "#hyv-search" ).autocomplete({
+    //   source: function( request, response ) {
+    //     //console.log(request.term);
+    //     var sqValue = [];
+    //     jQuery.ajax({
+    //         type: "POST",
+    //         url: "https://suggestqueries.google.com/complete/search?hl=en&ds=yt&client=youtube&hjson=t&cp=1",
+    //         dataType: 'json',
+    //         data: jQuery.extend({
+    //             q: request.term
+    //         }, {  }),
+    //         success: function(data){
+    //             console.log(data[1]);
+    //             obj = data[1];
+    //             jQuery.each( obj, function( key, value ) {
+    //                 sqValue.push(value[0]);
+    //             });
+    //             response(sqValue);
+    //         }
+    //     });
+    //   },
+    //   select: function( event, ui ) {
+    //     setTimeout( function () { 
+    //         youtubeApiCall();
+    //     }, 300);
+    //   }
+    // });  
         
 
 	// Function that will pull the Youtube videos from YouTube Search V3 API
@@ -395,7 +403,7 @@ $( document ).ready(function() {
 	            key: 'AIzaSyCjBRgUe6qWaI3aNmE7B1c-3AkEnY2RXRQ',
 	            q: $('#hyv-search').val(),
 	            part: 'snippet'
-	        }, {maxResults:5,pageToken:$("#pageToken").val()}),
+	        }, {maxResults:20,pageToken:$("#pageToken").val()}),
 	        dataType: 'json',
 	        type: 'GET',
 	        timeout: 5000,
@@ -409,7 +417,9 @@ $( document ).ready(function() {
 	        $("#pageTokenNext").val(data.nextPageToken);
 	        $("#pageTokenPrev").val(data.prevPageToken);
 	        $.each(items, function(index,e) {
-	            videoList = videoList + '<li class="hyv-video-list-item"><div class="hyv-content-wrapper"><a href="" class="hyv-content-link" title="'+e.snippet.title+'"><span class="title">'+e.snippet.title+'</span><span class="stat attribution">by <span>'+e.snippet.channelTitle+'</span></span></a></div><div class="hyv-thumb-wrapper"><a href="" class="hyv-thumb-link"><span class="hyv-simple-thumb-wrap"><img class="vidImg" data-vid=' + data.items[index].id.videoId + ' alt="'+e.snippet.title+'" src="'+e.snippet.thumbnails.default.url+'" width="120" height="90"></span></a></div></li>';
+	            // videoList = videoList + '<li class="hyv-video-list-item"><div class="hyv-content-wrapper"><a href="" class="hyv-content-link" title="'+e.snippet.title+'"><span class="title">'+e.snippet.title+'</span><span class="stat attribution">by <span>'+e.snippet.channelTitle+'</span></span></a></div><div class="hyv-thumb-wrapper"><a href="" class="hyv-thumb-link"><span class="hyv-simple-thumb-wrap"><img class="vidImg" data-vid=' + data.items[index].id.videoId + ' alt="'+e.snippet.title+'" src="'+e.snippet.thumbnails.default.url+'" width="120" height="90"></span></a></div></li>';
+
+	            videoList = videoList + '<li class="hyv-video-list-item"><div class="hyv-thumb-wrapper"><a href="" class="hyv-thumb-link"><span class="hyv-simple-thumb-wrap"><img class="vidImg" data-vid=' + data.items[index].id.videoId + ' alt="'+e.snippet.title+'" src="'+e.snippet.thumbnails.default.url+'" width="120" height="90"></span></a></div></li>';
 	        });
 	        $("#hyv-watch-related").html(videoList);
 	        // JSON Responce to display for user
