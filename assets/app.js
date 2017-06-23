@@ -128,15 +128,15 @@ $( document ).ready(function() {
 		
 		$.ajax({
 			data: {
-			  	cmd: 'depart',
-			  	orig: originStation,
-			  	dest: destinationStation,
-			  	time: myTime,
-			  	key: bartKey,
-			  	b: 1,
-			  	a: 2,
-			  	l: 1,
-			  	json: 'y'
+				cmd: 'depart',
+				orig: originStation,
+				dest: destinationStation,
+				time: myTime,
+				key: bartKey,
+				b: 1,
+				a: 2,
+				l: 1,
+				json: 'y'
 			},
 			url: queryURL,
 			method: "GET"
@@ -337,30 +337,6 @@ $( document ).ready(function() {
 			});
 	};
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	// Youtube API CODE
 
 	// Onclick event for Next and Previous buttons; when pressed, function youtubeAPIcall 
@@ -375,6 +351,8 @@ $( document ).ready(function() {
         youtubeApiCall();
     });
     $("#hyv-searchBtn").on( "click", function( event ) {
+        $('#fullVideo').empty();
+        $('#hyv-search').val('');
         youtubeApiCall();
         return false;
     });
