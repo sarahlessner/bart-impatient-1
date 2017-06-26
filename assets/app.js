@@ -179,6 +179,8 @@ $( document ).ready(function() {
 				// console.log("all real time", allRealTime);
 				var etd = allRealTime.etd;
 				//loop through ETD info
+				var convertOrig = convertStationAbbr(originStation);
+				$("#real-time-origin").append(convertOrig+" Station - "+" ");
 				for (i = 0; i < etd.length; i++) {
 					//if there is no real time data 
 					if (etd.length === undefined) {
@@ -187,8 +189,6 @@ $( document ).ready(function() {
 					}
 					else {
 						$("#real-time-container").show();
-						var convertOrig = convertStationAbbr(originStation);
-						$("#real-time-origin").append(convertOrig+" Station - "+" ");
 						var etdArray = [];
 						//get train line (final dest) and abbrev for all trains
 						var allRealTimeDest = etd[i].destination;
