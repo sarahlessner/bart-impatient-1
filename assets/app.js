@@ -78,8 +78,6 @@ $( document ).ready(function() {
 		//capture station entry values (abbr version of train or station name)
 		originStation = $("#origin-list").val();
 		destinationStation = $("#destination-list").val();
-		var convertOrig = convertStationAbbr(originStation);
-		$("#real-time-origin").append(convertOrig+" Station - "+" ");
 		//gets time entry values
 		// var ampm = $("#am-pm").val();
 		if ($("#time-selection").val() === "") {
@@ -100,7 +98,6 @@ $( document ).ready(function() {
 		getTripPlan();
 		realTime();
 		$("#trip-plan-container").show();
-		$("#real-time-container").show();
 	});
 
 	//function calling BARTS schedule info API to get a trip plan based on origin/dest
@@ -190,6 +187,8 @@ $( document ).ready(function() {
 					}
 					else {
 						$("#real-time-container").show();
+						var convertOrig = convertStationAbbr(originStation);
+						$("#real-time-origin").append(convertOrig+" Station - "+" ");
 						var etdArray = [];
 						//get train line (final dest) and abbrev for all trains
 						var allRealTimeDest = etd[i].destination;
