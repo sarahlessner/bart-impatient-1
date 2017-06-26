@@ -1,33 +1,15 @@
 <!DOCTYPE html>
 <head>
-	<title>We are Impatient!</title>
+	<title>BART UPSTREAM</title>
 	<meta charset="UTF-8">
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="assets/style.css">
-	<link href="https://fonts.googleapis.com/css?family=Lobster|Muli" rel="stylesheet">
-	<link rel="stylesheet" href="assets/animate.css">
   	
 </head>
 
-<body data-spy="scroll" data-target="#sidenav" data-offset="100">
-	<div class="promo">
-		<p class="text-center">This project was made by Val, Sarah, and Nina as part of the UC Berkeley Coding Bootcamp! <a href="https://bootcamp.berkeley.edu/coding/landing-ftpt/?s=G-Brand&mkwid=V2MMdo4f_dc&pkw=uc%20berkeley%20coding%20bootcamp&pcrid=184506896144&pmt=e&utm_source=google&utm_medium=cpc&utm_campaign=&utm_term=uc%20berkeley%20coding%20bootcamp&utm_content=184506896144&s=google&k=uc%20berkeley%20coding%20bootcamp&gclid=CjwKEAjw7J3KBRCxv93Q3KSukXQSJADzFzVSr068sb9aJ-zCaZVO-4YBpd4ZHDppZmyNRqhhrWu5aRoCxZTw_wcB">View More</a></p>
-	</div>
-
-	<div class="masthead">
-		<div class="container">
-			<div class="masthead-title">We Are Impatient
-				<small>A BART tracking app for people who hate waiting.</small>
-				<img class="slideLeft" src="barttrain.png" width="700" height="300" alt="" >
-			</div>
-		</div>
-	</div>
-
-	<div class="container">
-		<div class="row">
-			<div class="col-md-10">
+	<h1>BART TRACKER WITH UPSTREAM</h1>
 
 	
 	<!-- SERVICE ADVISORIES ID service-advisories -->
@@ -35,8 +17,6 @@
 		<div class="row">
 			<div class="alert-panel col-md-12">
 				<div id="service-advisories">
-					<div id="service-alert" class="floating"><p>BART is recovering from an earlier problem. There is a 20-minute delay on the San Francisco Line in the Pittsburg / Bay Point, Dublin / Pleasanton and Richmond directions due to an equipment problem on a train.
-					</div>
 				</div>
 			</div>
 		</div>
@@ -51,7 +31,7 @@
 
 				<div class="panel panel-primary">
 					<div class="panel-heading">
-						<h3 class="panel-title"><strong>Where are you headed?</strong></h3>
+						<h3 class="panel-title"><strong>Plan a Trip</strong></h3>
 					</div>
 
 					<div class="panel-body">
@@ -68,14 +48,16 @@
 					     	</select>
 						<!-- list drop downs will always display on page load -->
 							<select class="form-control" id="origin-list">
+								<option selected>Select Origin Station</option>
 									<!-- station options list will live here -->
 							</select>
 							<select class="form-control" id="destination-list">
+							<option selected>Select Destination Station</option>
 									<!-- station options list will live here -->
 							</select>
 
 							
-							<button type="submit" class="btn btn-primary" id="addTrainBtn">Submit</button>
+							<button type="submit" class="btn btn-primary" id="addTrainBtn">Get Trip Plan!</button>
 						</form>
 					</div>
 				</div>
@@ -123,77 +105,18 @@
 		</div>
 	</div>
 	
+
+
 	
-	<!--schedule data from JS will append here -->
-	</div>
-
-	<!--YOUTUBE VIDEO #youtube-->
-
-	<div class="container">
-		<div class="row">
-			<div class="selection-panel col-md-12">
-					<div id="youtube" class="panel panel-primary">
-						<div class="panel-heading">
-							<h3 class="panel-title"><strong>Watch a Video</strong></h3>
-						</div>
-							<div class="row-fluid">
-						        <main id="content" role="main" class="span12 panel-body">
-						            <!-- Begin Content -->
-						            <div id="hyv-page-container" style="clear:both;">
-						                <div class="hyv-content-alignment">
-						                    <div id="hyv-page-content" class="" style="overflow:hidden;">
-						                        <div class="container-4">
-
-						                       		<!-- Create Input box and button to get full view of search box -->
-						                            <form action="" method="post" name="hyv-yt-search" id="hyv-yt-search">
-						                                <input type="search" name="hyv-search" id="hyv-search" placeholder="Search..." class="ui-autocomplete-input" autocomplete="off">
-						                                <button class="icon" id="hyv-searchBtn">Go</button>
-						                            </form>
-						                        </div>
-						                        <div>
-						                            <input type="hidden" id="pageToken" value="">
-						                            <div class="btn-group" role="group" aria-label="...">
-						                              <button type="button" id="pageTokenPrev" value="" class="btn btn-default">Prev</button>
-						                              <button type="button" id="pageTokenNext" value="" class="btn btn-default">Next</button>
-						                            </div>
-						                        </div>
-						                        <div id="hyv-watch-content" class="hyv-watch-main-col hyv-card hyv-card-has-padding">
-						                            <ul id="hyv-watch-related" class="hyv-video-list">
-						                            </ul>
-						                            <div id="fullVideo"></div>
-						                        </div>
-						                    </div>
-						                </div>
-						            </div>
-						        </main>
-					    	</div>
-				   </div>
-		    </div>
-		</div>
-	</div>
 
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-<!-- 3rd party dependencies for Youtube API
-Before implementing the jQuery Ajax request for “YouTube autocomplete search suggestions API”, we need to include jQuery framework and jQuery UI dependency --> 
-<script
- src="https://code.jquery.com/jquery-3.2.1.min.js"
- integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
- crossorigin="anonymous"></script>
- <script
- src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
- integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
- crossorigin="anonymous"></script>
-
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
- <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
- <script type="text/javascript" src="assets/underscore-min.js"></script>
- <script type="text/javascript" src="assets/backbone-min.js"></script>
- <script type="text/javascript" src="assets/pretty-json-min.js"></script>
- <script src="assets/app.js"></script>
+<script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+<script src="assets/app.js"></script>
   <!-- bootbox needs to live below jquery/bootstrap -->
- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 
 
  

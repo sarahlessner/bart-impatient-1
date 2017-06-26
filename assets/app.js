@@ -19,7 +19,7 @@ $( document ).ready(function() {
 	var myTime;
 	//get load number 0-4 from API and access load array at idx of load #
 	//0 load from bart means load info not available
-	var loadArray = ["unavailable", "light","normal","heavy","packed"];
+	var loadArray = ["unavailable", "many seats","few seats","seat unlikely","good luck getting on"];
 	var bartKey = 'ZVZV-PH5D-9W3T-DWE9';
 
 
@@ -109,6 +109,9 @@ $( document ).ready(function() {
 				bootbox.alert("Please enter time in h:mm format");
 			}
 		}
+		if ((originStation === "Select Origin Station") || (destinationStation === "Select Destination Station")) {
+			bootbox.alert("Please select an origin AND destination station");
+		}
 		getTripPlan();
 		realTime();
 		$("#youtube").show();
@@ -141,7 +144,7 @@ $( document ).ready(function() {
 			url: queryURL,
 			method: "GET"
 			}).done(function(response) {
-
+				console.log(response);
 				tripsArray = [];
 				//for each available route at the station		    	
 				for (i = 0; i < response.root.schedule.request.trip.length; i++) {
@@ -156,7 +159,8 @@ $( document ).ready(function() {
 						var finalTrainDest = myTrip.leg['@trainHeadStation'];
 						var legOriginTime = myTrip.leg['@origTimeMin'];
 						var load = myTrip.leg['@load'];
-						var myLeg = [legOrigin, legDest, finalTrainDest, legOriginTime, load];
+						var line = myTrip.leg['@line'];
+						var myLeg = [legOrigin, legDest, finalTrainDest, legOriginTime, load, line];
 						legsArray.push(myLeg);
 					}
 					//else a transfer is required ("leg" is an array of objects)
@@ -167,10 +171,8 @@ $( document ).ready(function() {
 							var finalTrainDest = myTrip.leg[j]['@trainHeadStation'];
 							var legOriginTime = myTrip.leg[j]['@origTimeMin'];
 							var load = myTrip.leg[j]['@load'];
-							// console.log("trip origin:", legOrigin, "trip destination:", legDest, "final destination:", finalTrainDest);
-							// console.log("finalDest", finalDest);
-
-							var myLeg = [legOrigin, legDest, finalTrainDest, legOriginTime, load];
+							var line = myTrip.leg[j]['@line'];
+							var myLeg = [legOrigin, legDest, finalTrainDest, legOriginTime, load, line];
 							legsArray.push(myLeg);
 						}
 					}
@@ -219,7 +221,7 @@ $( document ).ready(function() {
 						for (j = 0; j < allEstimates.length; j++) {
 							var minutesToArrive = allEstimates[j].minutes;
 							var trainLength = allEstimates[j]['length'];
-							var lineColor = allEstimates[j].color;
+							var lineColor = allEstimates[j].hexcolor;
 							// console.log("minutesToArrive", minutesToArrive, "trainLength", trainLength, "lineColor", lineColor);
 							var estimatesArray = [minutesToArrive,trainLength,lineColor];
 							etdArray.push(estimatesArray);
@@ -244,6 +246,14 @@ $( document ).ready(function() {
 			//loop through the train level data for leg(s) of each trip
 			for(var j = 0; j < tripsArray[i].length; j++) {
 				var tripLeg = $("<div>");
+				//route number
+				var routeNo = tripsArray[i][j][5];
+				routeNo = getLineColor(routeNo);
+				var colorBox = $("<div>");
+					colorBox.css({
+						'background-color': routeNo,
+					}).addClass("color-box");
+					tripLeg.append(colorBox);
 				//access full name of the train (final station dest.)
 				var finalTrainDest = tripsArray[i][j][2];
 				//reset to result of function to convert abbr to full name
@@ -260,10 +270,13 @@ $( document ).ready(function() {
 				legDest = convertStationAbbr(legDest);
 				//append arrival time for trip leg origin train
 				tripLeg.append(tripsArray[i][j][3]+"  --  ");
-				//append train crowding(load) info
-				tripLeg.append("Train Crowding: "+loadValue+"<br>");
 				//append final train destination
-				tripLeg.append(finalTrainDest+" "+"Train"+" / ");
+				tripLeg.append(finalTrainDest+" "+"Train <br>");
+				//append train crowding(load) info
+				if (loadValue !== "unavailable") {
+					tripLeg.append("Train Crowding: "+loadValue+"<br>");
+				}
+				// tripLeg.append("Train Crowding: "+loadValue+"<br>")
 				// append origin leg
 				tripLeg.append(legOrigin+" ---> ");
 				// append destination leg
@@ -293,10 +306,17 @@ $( document ).ready(function() {
 			//looping through all train level estimate data for the origin station
 			for (var j = 2; j < realTimeArray[i].length; j++) {
 				//minsaway
-				etd.append(realTimeArray[i][j][0]+"min"+" ");
-				//if we want to display train length, uncomment
-				// etd.append(realTimeArray[i][j][1]+" "+"cars"+" -- ");
-				
+				if(j != 2) {
+					etd.append(" -- ");
+				}
+				if (realTimeArray[i][j][0] === "Leaving") {
+					etd.append(realTimeArray[i][j][0]+" ");
+				}
+				else {
+					etd.append(realTimeArray[i][j][0]+"min"+" ");
+				}
+				etd.append(realTimeArray[i][j][1]+" "+"cars");
+
 				$("#real-time").append(etd);
 			}
 		}
@@ -310,6 +330,16 @@ $( document ).ready(function() {
 		//get full name at the same index as abbreviation
 		var fullName = stationNameArray[abbrIdx];
 		return fullName;
+	};
+	//function to get line color display for trip planner data
+	//necessary because trip plan API does not have color info
+	function getLineColor(line) {
+		//look up route in routeNumsArr
+		var routeIdx = $.inArray(line, routeNumsArr);
+		//get line color at same index as route number
+		var routeColor = routeColorsArr[routeIdx];
+		return routeColor;
+
 	};
 
 	//service advisory API 
@@ -328,120 +358,55 @@ $( document ).ready(function() {
 			}).done(function(response) {
 				//loop through available BSA
 				for (var i = 0; i < response.root.bsa.length; i++) {
-				//store text of each alert
-				var bsa = response.root.bsa[i].description['#cdata-section'];
-				var timeOfAlert = response.root.bsa[i].posted;
-				if (timeOfAlert) { // if it is truthy
-					timeOfAlert.addClass("service-alert");
+					//store text of each alert
+					var bsa = response.root.bsa[i].description['#cdata-section'];
+					var timeOfAlert = response.root.bsa[i].posted;
 					if ((timeOfAlert === undefined) || (bsa === "No delays reported.")) {
 						$("#service-advisories").empty();
-						}	
-						else {
+					}	
+					else {
+						$("#service-advisories").addClass("service-alert");
 						$("#service-advisories").append(timeOfAlert+"<br>", bsa);
-						}
 					}
 				}
+
 			});
 	};
 
-	// Youtube API CODE
+	stationsByLine();
+	// var routeNamesArray = [];
+	// //multi-dimensional array containing lists of stations on the 12 routes 
+	// var routeStationListsArray = [];
+	var routeNumsArr = [];
+	var routeColorsArr = [];
 
-	// Onclick event for Next and Previous buttons; when pressed, function youtubeAPIcall 
-	//	will execute and grab the next set of videos
-    youtubeApiCall();
-    $("#pageTokenNext").on( "click", function( event ) {
-        $("#pageToken").val($("#pageTokenNext").val());
-        youtubeApiCall();
-    });
-    $("#pageTokenPrev").on( "click", function( event ) {
-        $("#pageToken").val($("#pageTokenPrev").val());
-        youtubeApiCall();
-    });
-    $("#hyv-searchBtn").on( "click", function( event ) {
-        $('#fullVideo').empty();
-        // $('#hyv-search').val('');
-        youtubeApiCall();
-        return false;
-    });
+	function stationsByLine() {
 
-    //note: the below function was not working but is living here to show the effort/attempt Val made and possibly work on in the future
-    // Function that will implement the YouTube search suggestions API 
-    // jQuery( "#hyv-search" ).autocomplete({
-    //   source: function( request, response ) {
-    //     //console.log(request.term);
-    //     var sqValue = [];
-    //     jQuery.ajax({
-    //         type: "POST",
-    //         url: "https://suggestqueries.google.com/complete/search?hl=en&ds=yt&client=youtube&hjson=t&cp=1",
-    //         dataType: 'json',
-    //         data: jQuery.extend({
-    //             q: request.term
-    //         }, {  }),
-    //         success: function(data){
-    //             console.log(data[1]);
-    //             obj = data[1];
-    //             jQuery.each( obj, function( key, value ) {
-    //                 sqValue.push(value[0]);
-    //             });
-    //             response(sqValue);
-    //         }
-    //     });
-    //   },
-    //   select: function( event, ui ) {
-    //     setTimeout( function () { 
-    //         youtubeApiCall();
-    //     }, 300);
-    //   }
-    // });  
-        
+		var queryURL = "https://api.bart.gov/api/route.aspx?cmd=routeinfo&route=all&key=ZVZV-PH5D-9W3T-DWE9&json=y";
 
-	// Function that will pull the Youtube videos from YouTube Search V3 API
-	function youtubeApiCall(){
-	    $.ajax({
-	        cache: false,
-	        data: $.extend({
-	            key: 'AIzaSyCjBRgUe6qWaI3aNmE7B1c-3AkEnY2RXRQ',
-	            q: $('#hyv-search').val(),
-	            part: 'snippet'
-	        }, {maxResults:20,pageToken:$("#pageToken").val()}),
-	        dataType: 'json',
-	        type: 'GET',
-	        timeout: 5000,
-	        url: 'https://www.googleapis.com/youtube/v3/search'
-	    })
-	    .done(function(data) {
-	    	console.log(data.items[0].id.videoId);
-	        if (typeof data.prevPageToken === "undefined") {$("#pageTokenPrev").hide();}else{$("#pageTokenPrev").show();}
-	        if (typeof data.nextPageToken === "undefined") {$("#pageTokenNext").hide();}else{$("#pageTokenNext").show();}
-	        var items = data.items, videoList = "";
-	        $("#pageTokenNext").val(data.nextPageToken);
-	        $("#pageTokenPrev").val(data.prevPageToken);
-	        $.each(items, function(index,e) {
-	            // videoList = videoList + '<li class="hyv-video-list-item"><div class="hyv-content-wrapper"><a href="" class="hyv-content-link" title="'+e.snippet.title+'"><span class="title">'+e.snippet.title+'</span><span class="stat attribution">by <span>'+e.snippet.channelTitle+'</span></span></a></div><div class="hyv-thumb-wrapper"><a href="" class="hyv-thumb-link"><span class="hyv-simple-thumb-wrap"><img class="vidImg" data-vid=' + data.items[index].id.videoId + ' alt="'+e.snippet.title+'" src="'+e.snippet.thumbnails.default.url+'" width="120" height="90"></span></a></div></li>';
+		$.ajax({
+			url: queryURL,
+			method: "GET"
+		}).done(function(response) {
+			//loop through number of routes and pull route names and stations
+			for (var i = 0; i < response.root.routes.route.length; i++) {
+				var routeName = response.root.routes.route[i].name;
+				var line = response.root.routes.route[i].routeID;
+				var lineColor = response.root.routes.route[i].color;
+				console.log(line, lineColor);
+				routeColorsArr.push(lineColor);
+				routeNumsArr.push(line);
+				// var stationsOnRoute = response.root.routes.route[i].config.station;
+				// //push route names to array
+				// routeNamesArray.push(route);
+				// //push lists of stations on routes to multi-dimensional array
+				// routeStationListsArray.push(stationsOnRoute);
+			}
+			console.log(routeColorsArr);
+		});    	
 
-	            videoList = videoList + '<li class="hyv-video-list-item"><div class="hyv-thumb-wrapper"><a href="" class="hyv-thumb-link"><span class="hyv-simple-thumb-wrap"><img class="vidImg" data-vid=' + data.items[index].id.videoId + ' alt="'+e.snippet.title+'" src="'+e.snippet.thumbnails.default.url+'" width="120" height="90"></span></a></div></li>';
-	        });
-	        $("#hyv-watch-related").html(videoList);
-	        // JSON Responce to display for user
-	        new PrettyJSON.view.Node({ 
-	            el:$(".hyv-watch-sidebar-body"), 
-	            data:data
-	        });
-	    });
 	};
 
-    $(document).on("click", ".vidImg", function(event){
-    	event.preventDefault();
-    	$("#hyv-watch-related").empty();
-    	console.log("inside click handler");
-    	var $this = $(this);
-    	console.log("this", $this);
-    	var vid = $this.attr("data-vid");
-    	console.log("vid", vid);
-    	var vidLink = "https://www.youtube.com/embed/" + vid;
-    	// $('<iframe width="560" height="315" frameborder="0" allowfullscreen></iframe>').attr('src', vidLink).appendTo('#fullVideo');
-    	$('#fullVideo').html('<iframe src="' + vidLink + '" width="560" height="315" frameborder="0" allowfullscreen></iframe>');
-	});
 });	
 
 
