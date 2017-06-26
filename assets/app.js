@@ -59,18 +59,10 @@ $( document ).ready(function() {
 			});
 	};
 
-	//hide time entry fields as the default
-	$("#am-pm").hide();
-	$("#time-input").hide();
-	//on click to toggle fields for departure time entry
-	$("#enter-time").on("click", function(){
-		event.preventDefault();
-		$("#am-pm").toggle();
-		$("#time-input").toggle();
-	});
 
-	//hide youtube, train schedules as default
-	$("#youtube").hide();
+	$("#time-selection").timepicker({ 'scrollDefault': 'now' });
+	
+	//hide train schedules as default
 	$("#real-time-container").hide();
 	$("#trip-plan-container").hide();
 
@@ -78,51 +70,38 @@ $( document ).ready(function() {
 	$("#addTrainBtn").on("click", function(){
 		event.preventDefault();
 		//empty trip-plan and real-time divs
+		$("#real-time-container").hide();
+		$("#trip-plan-container").hide();
 		$("#trip-plan").empty();
 		$("#real-time").empty();
-		$("#hyv-watch-related").empty();
-		$('#fullVideo').empty();
+		$("#real-time-origin").empty();
 		//capture station entry values (abbr version of train or station name)
 		originStation = $("#origin-list").val();
 		destinationStation = $("#destination-list").val();
+		var convertOrig = convertStationAbbr(originStation);
+		$("#real-time-origin").append(convertOrig+" Station - "+" ");
 		//gets time entry values
-		var ampm = $("#am-pm").val();
-		var timeInput = $("#time-input").val();
-		//checks if user entered a time without selecting "AM" or "PM"
-		if ((timeInput != "") && (ampm === "")) {
-			//we're not allowed to use alerts so we'll have to do something else but this is here to test
-			bootbox.alert("please clear your time entry or select am/pm");
-			return;
-		}
-		//sets time to "now" if the user does not enter a time
-		if ((timeInput === "") && (ampm === "")) {
+		// var ampm = $("#am-pm").val();
+		if ($("#time-selection").val() === "") {
 			myTime = "now";
 		}
-		//if they entered a time properly, execute function to validate
 		else {
-			if (validateTime(timeInput)) {
-			//if time is valid store the input 
-			myTime = timeInput+ampm;
-			}
-			else {
-				//need to alert with different method
-				bootbox.alert("Please enter time in h:mm format");
-			}
+			myTime = $("#time-selection").val();
 		}
+		
 		if ((originStation === "Select Origin Station") || (destinationStation === "Select Destination Station")) {
-			bootbox.alert("Please select an origin AND destination station");
+			bootbox.alert("Please select an origin AND destination station!");
+			return;
+		}
+		if (originStation === destinationStation) {
+			bootbox.alert("'Origin Station' and 'Destination Station' cannot be the same!");
+			return;
 		}
 		getTripPlan();
 		realTime();
-		$("#youtube").show();
 		$("#trip-plan-container").show();
+		$("#real-time-container").show();
 	});
-
-	//function to validate time input 
-	function validateTime(timestring) {
-		var checkUserTime = moment(timestring,'h:mm');
-		return checkUserTime.isValid();
-	};
 
 	//function calling BARTS schedule info API to get a trip plan based on origin/dest
 	function getTripPlan() {

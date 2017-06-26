@@ -5,11 +5,15 @@
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css">
+	<link href="https://fonts.googleapis.com/css?family=Questrial|Slackey" rel="stylesheet">
+
 	<link rel="stylesheet" type="text/css" href="assets/style.css">
   	
 </head>
 
-	<h1>BART TRACKER WITH UPSTREAM</h1>
+<div class="main-page">
+	<h1>LET'S BART, BITCHES</h1>
 
 	
 	<!-- SERVICE ADVISORIES ID service-advisories -->
@@ -31,21 +35,16 @@
 
 				<div class="panel panel-primary">
 					<div class="panel-heading">
-						<h3 class="panel-title"><strong>Plan a Trip</strong></h3>
+						<h3 class="panel-title">Plan a Trip</h3>
 					</div>
 
 					<div class="panel-body">
 						<form>
-								<!-- <label for="timeInput" class="col-2 col-form-label">Click to Enter Departure Time</label> -->
-							<button class="btn btn-primary" id="enter-time">Enter Departure Time (Optional)</button> <!--TODO: add hover event to button that says some variation of "defaults to current time" -->
-						    <div class="col-10">
-						        <input class="form-control" type="text" placeholder="h:mm" id="time-input">
-						    </div>
-					    	<select class="form-control" id="am-pm">
-					    		<option value="">Select AM/PM</option><!-- TODO:change text of "Select AM/PM" to match the placeholder text styling of the text input -->
-					        	<option value="am">AM</option>
-					        	<option value="pm">PM</option>
-					     	</select>
+							<!-- <button class="btn btn-primary" id="enter-time">Enter Departure Time (Optional)</button>  -->
+						   
+					    	<input class="form-control" id="time-selection" placeholder="Select or Enter Departure Time (Optional)">
+								
+					    	</input>
 						<!-- list drop downs will always display on page load -->
 							<select class="form-control" id="origin-list">
 								<option selected>Select Origin Station</option>
@@ -74,10 +73,10 @@
 
 				<div class="panel panel-primary">
 					<div class="panel-heading">
-						<h3 class="panel-title"><strong>Real Time Data</strong></h3>
+						<h3 class="panel-title"><span id="real-time-origin"></span>All Trains - Real Time</h3>
 					</div>
 
-					<div class="panel-body">
+					<div class="panel-body trip-container">
 						<div id="real-time">
 						</div>
 					</div>
@@ -94,17 +93,17 @@
 
 				<div class="panel panel-primary">
 					<div class="panel-heading">
-						<h3 class="panel-title"><strong>Train Schedule</strong></h3>
+						<h3 class="panel-title">Custom Trip Plan</h3>
 					</div>
 
-					<div class="panel-body">
+					<div class="panel-body trip-container">
 						<div id="trip-plan">
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	
+</div>
 
 
 	
@@ -114,6 +113,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.js"></script>
 <script src="assets/app.js"></script>
   <!-- bootbox needs to live below jquery/bootstrap -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>

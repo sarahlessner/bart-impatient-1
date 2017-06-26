@@ -1,25 +1,31 @@
 
 h1 {
+  font-family: 'Slackey', cursive;
   text-align: center;
-}
-
-/*#real-time,
-#trip-plan {
-	margin-top: 20px;
-}
-
-*/
-.selection-panel {
-  padding: 10px;
 }
 
 .panel-primary>.panel-heading {
   color: #fff;
-  background-color: #04abc2;
+  background-color: #17c9ba;
+
+}
+
+.panel-title {
+  font-family: 'Questrial', sans-serif;
+  font-size: 25px;
 }
 
 .panel-primary {
   border-color: black;
+
+}
+
+.panel-body {
+  background: black;
+}
+
+#time-selection {
+  margin-top: 10px;
 }
 
 .panel,
@@ -27,20 +33,25 @@ h1 {
   border-radius: 0;
 }
 
-.form-control {
-  border-radius: 0;
-  border-color: black;
-  margin: 5px;
+.trip-container {
+  padding: 0;
+}
+
+#origin-list,
+#destination-list {
+
+  margin-top: 8px;
 }
 
 .form-control:focus {
-  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0 1px 1px rgba(253, 221, 251, 0.9);
- 
+  border-color: #86f0db;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(86,209,185 0.5);
 }
 
-.btn {
-  margin: 5px;
-  background-color: #04abc2;
+.btn,
+.btn-primary {
+  margin-top: 10px;
+  background-color: #17c9ba;
   color: white;
   border: 1px solid black;
   font-size: 14px;
@@ -51,38 +62,23 @@ h1 {
 
 .btn:hover {
   background-color: gray;
-
-}
-
-/*#enter-time .hovertxt {
-
-  visibility: hidden;
-  width: 150px;
-  background-color: #f1eef3;
-  color: white;
-  text-align: center;
-  border-radius: 0;
-  padding: 5px 0;
-
-  position: absolute;
-  left: 21%;
-  top: 70px;
   
-}*/
-
-
-#enter-time:hover .hovertxt {
-  visibility: visible;
 }
 
+
+.btn:focus {
+  border-color: #86f0db;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(86,209,185 0.5);
+  background-color: black !important;
+  color: #04abc2 !important;
+}
 
 
 .etd-train, .trip-option {
   background-color: black;
-  font-family: 'Muli', sans-serif;
   font-size: 14px;
-  padding: 8px;
-  border:1px solid white;
+  padding: 5px;
+  border-top:1px solid white;
   color: white;
 }
 
@@ -93,16 +89,16 @@ h1 {
 .service-alert {
   border: none;
   position: relative;
-  background-color: rgba(210, 238, 248, 0.2);
+  background-color: rgba(210, 238, 248, 0.5);
   color: black;
   font-size: 16px;
-  padding: 10px;
+  padding: 15px;
 
 }
 
 .color-box {
   height: 40px;
-  width: 18px;
+  width: 15px;
   float: left;
   margin-right: 5px;
   border-radius: 8px;
