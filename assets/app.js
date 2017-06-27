@@ -11,6 +11,7 @@ $( document ).ready(function() {
 	//store abbreviations from stationAbbrArray that correspond to user selections for origin/dest stations
 	var originStation;
 	var destinationStation;
+	var stationInfo;
 	//multidimensional array storing data from getTripPlan function
 	var tripsArray = [];
 	//multidimensional array storing data from realTime function
@@ -55,6 +56,13 @@ $( document ).ready(function() {
 					destList.text(stationName);
 					destList.attr("value", stationAbbr);
 					$("#destination-list").append(destList);
+
+					stnList = $("<option>");
+					stnList.addClass("station-selection");
+					stnList.text(stationName);
+					stnList.attr("value", stationAbbr);
+					$("#station-list").append(stnList);
+
 				};
 			});
 	};
@@ -107,6 +115,12 @@ $( document ).ready(function() {
 		getTripPlan();
 		realTime();
 		$("#trip-plan-container").show();
+	});
+
+	$("#getStnInfo").on("click", function(){
+		event.preventDefault();
+		stationInfo = $("#station-list").val();
+		getStationInfo();
 	});
 
 	// $("#reverse-selection").on("click", function(){
@@ -400,6 +414,23 @@ $( document ).ready(function() {
 			console.log(routeColorsArr);
 		});    	
 
+	};
+
+	function getStationInfo() {
+		var queryURL = "https://api.bart.gov/api/stn.aspx";
+
+		$.ajax({
+			data: {
+				cmd:'stninfo',
+				orig: stationInfo,
+				key: bartKey,
+				json: 'y'
+			},
+			url: queryURL,
+			method: "GET"
+		}).done(function(response) {
+
+		});
 	};
 
 });	

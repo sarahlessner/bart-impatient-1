@@ -89,6 +89,7 @@ li {
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(86,209,185 0.5);
 }
 
+#getStnInfo,
 #addTrainBtn {
   margin-top: 10px;
   background-color: #0083d2;
