@@ -1,16 +1,23 @@
 body {
-  background: url("images/tilebackground.jpg");
+  background-image: url("images/hexellence.png");
+  background-color: #ebf3f7;
 }
 
-h1 {
+.page-title {
   font-family: 'Prompt', sans-serif;
-  font-size: 50px;
-  float: left;
-  margin-left: 150px;
+  font-size: 40px;
+  color: #0083d2 !important;
+}
+
+.navbar {
+  border-radius: 0;
+}
+
+li {
+  list-style: none;
 }
 
 .panel-primary>.panel-heading {
-  clear: both;
   color: #fff;
   background-color: #0083d2;
 
@@ -18,7 +25,7 @@ h1 {
 
 .panel-title {
   font-family: 'Questrial', sans-serif;
-  font-size: 25px;
+  font-size: 20px;
 }
 
 .panel-primary {
@@ -33,6 +40,11 @@ h1 {
 #time-selection {
   margin-top: 10px;
   border-radius: 4px;
+}
+
+.dropdown-menu {
+  background: black;
+  border: 1px solid white;
 }
 
 .panel,
@@ -57,6 +69,14 @@ h1 {
 
 .timepicker {
   background-color: #0083d2;
+  border-radius: 100%;
+}
+
+#toggle-btn:focus,
+.timepicker:hover,
+.timepicker:focus {
+  border-color: #60d3ff;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(86,209,185 0.5);
 }
 
 #addTrainBtn {
@@ -76,7 +96,7 @@ h1 {
 
 
 .btn:focus {
-  border-color: #0083d2;
+  border-color: #60d3ff;
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(86,209,185 0.5);
   background-color: white !important;
   color: #0083d2 !important;
@@ -95,10 +115,10 @@ h1 {
    margin-top: 10px;
 }
 
-.service-alert {
+#service-advisories {
   border: none;
   position: relative;
-  background-color: rgba(210, 238, 248, 0.5);
+  background-color: rgba(210, 238, 248, 0.9);
   color: black;
   font-size: 16px;
   padding: 15px;

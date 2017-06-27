@@ -109,6 +109,11 @@ $( document ).ready(function() {
 		$("#trip-plan-container").show();
 	});
 
+	// $("#reverse-selection").on("click", function(){
+	// 	originStation = $("#destination-list").val();
+	// 	destinationStation = $("#origin-list").val();
+	// });
+
 	//function calling BARTS schedule info API to get a trip plan based on origin/dest
 	function getTripPlan() {
 
@@ -265,7 +270,7 @@ $( document ).ready(function() {
 				}
 				// tripLeg.append("Train Crowding: "+loadValue+"<br>")
 				// append origin leg
-				tripLeg.append(legOrigin+" ---> ");
+				tripLeg.append(legOrigin+" "+"<img width='30'src='assets/images/greenarrow.png'>"+" ");
 				// append destination leg
 				tripLeg.append(legDest+" ");
 				//append trip leg(s) to trip option div
@@ -330,6 +335,7 @@ $( document ).ready(function() {
 	};
 
 	//service advisory API 
+	$("#service-advisories").hide();
 	function serviceAdvisory()	{
 
 		var queryURL = "https://api.bart.gov/api/bsa.aspx?cmd=bsa&key=ZVZV-PH5D-9W3T-DWE9&date=today&json=y";
@@ -350,10 +356,12 @@ $( document ).ready(function() {
 					var timeOfAlert = response.root.bsa[i].posted;
 					if ((timeOfAlert === undefined) || (bsa === "No delays reported.")) {
 						$("#service-advisories").empty();
+						$("#service-advisories").hide();
 					}	
 					else {
-						$("#service-advisories").addClass("service-alert");
+						// $("#service-advisories").addClass("service-alert");
 						$("#service-advisories").append(timeOfAlert+"<br>", bsa);
+						$("#service-advisories").show();
 					}
 				}
 

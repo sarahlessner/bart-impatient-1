@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <head>
-	<title>BART UPSTREAM</title>
+	<title>BART Station Info</title>
 	<meta charset="UTF-8">
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -29,24 +29,13 @@
 	    <!-- Collect the nav links, forms, and other content for toggling -->
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	      <ul class="nav navbar-nav">
-	        <li class="active"><a href="index.html">Trip Planner<span class="sr-only">(current)</span></a></li>
-	        <li><a href="stations.html">Station Info</a></li>
+	        <li><a href="index.html">Trip Planner</a></li>
+	        <li class="active"><a href="stations.html">Station Info<span class="sr-only">(current)</span></a></li>
 	      </ul>
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->
 	</nav>
 	
-	<!-- SERVICE ADVISORIES ID service-advisories -->
-	<div class="container">
-		<div class="row">
-			<div class="alert-panel col-md-12">
-				<div id="service-advisories">
-				</div>
-			</div>
-		</div>
-	</div>
-
-			
 	<!-- form area for user selections -->
 
 	<div class="container">
@@ -55,29 +44,18 @@
 
 				<div class="panel panel-primary">
 					<div class="panel-heading">
-						<h3 class="panel-title">Plan a Trip</h3>
+						<h3 class="panel-title">Get Station Information</h3>
 					</div>
 
 					<div class="panel-body">
 						<form>
-						<!-- list drop downs will always display on page load -->
-						<div class="input-append">
-    						<input type="text" id="time-selection" class="input-small" placeholder="  select time (optional)">
-    						<button class="timepicker" type="button" id="toggle-btn">
-        					<span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-    						</button>
-						</div>
+						
 							<select class="form-control" id="origin-list">
-								<option selected>Select Origin Station</option>
+								<option selected>Select Station</option>
 									<!-- station options list will live here -->
 							</select>
-							<select class="form-control" id="destination-list">
-							<option selected>Select Destination Station</option>
-									<!-- station options list will live here -->
-							</select>
-						<!-- 	<a id="reverse-selection">  Reverse</a><br> -->
 							
-							<button type="submit" class="btn btn-primary" id="addTrainBtn">Get Trip Plan!</button>
+							<button type="submit" class="btn btn-primary" id="addTrainBtn">Get Station Info</button>
 						</form>
 					</div>
 				</div>
@@ -86,44 +64,6 @@
 	</div>
 
 
-
-	<!-- REAL TIME DATA - WILL DISPLAY ALL TRAINS AT ORIGIN STATION ID #real-time-->
-	<div class="container" id="real-time-container">
-		<div class="row">
-			<div class="selection-panel col-md-12">
-
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						<h3 class="panel-title"><span id="real-time-origin"></span> Real Time</h3>
-					</div>
-
-					<div class="panel-body trip-container">
-						<div id="real-time">
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<!--SCHEDULE DATA - WILL DISPLAY USERS TRIP PLANS #trip-plan -->
-
-	<div class="container" id="trip-plan-container">
-		<div class="row">
-			<div class="selection-panel col-md-12">
-
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						<h3 class="panel-title">Custom Trip Plan</h3>
-					</div>
-
-					<div class="panel-body trip-container">
-						<div id="trip-plan">
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
 
 
 	
