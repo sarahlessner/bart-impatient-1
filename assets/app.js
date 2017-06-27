@@ -117,11 +117,8 @@ $( document ).ready(function() {
 		$("#trip-plan-container").show();
 	});
 
-	$("#getStnInfo").on("click", function(){
-		event.preventDefault();
-		stationInfo = $("#station-list").val();
-		getStationInfo();
-	});
+
+
 
 	// $("#reverse-selection").on("click", function(){
 	// 	originStation = $("#destination-list").val();
@@ -416,6 +413,9 @@ $( document ).ready(function() {
 
 	};
 
+	//Station Info Page
+
+	//BART Station Info API
 	function getStationInfo() {
 		var queryURL = "https://api.bart.gov/api/stn.aspx";
 
@@ -432,6 +432,13 @@ $( document ).ready(function() {
 
 		});
 	};
+
+	//Station Info page list selector
+	$("#getStnInfo").on("click", function(){
+		event.preventDefault();
+		stationInfo = $("#station-list").val();
+		getStationInfo();
+	});
 
 });	
 
