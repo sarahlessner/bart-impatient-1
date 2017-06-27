@@ -8,10 +8,18 @@ body {
   font-size: 40px;
   font-weight: bolder;
   color: #0083d2 !important;
+  text-shadow: 1px 1px white;
 }
 
 .navbar {
   border-radius: 0;
+}
+
+.navbar-inverse .navbar-nav>.active>a, 
+.navbar-inverse .navbar-nav>.active>a:focus, 
+.navbar-inverse .navbar-nav>.active>a:hover {
+    color: #fff;
+    background-color: #0083d2;
 }
 
 li {
