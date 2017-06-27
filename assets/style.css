@@ -6,6 +6,7 @@ body {
 .page-title {
   font-family: 'Prompt', sans-serif;
   font-size: 40px;
+  font-weight: bolder;
   color: #0083d2 !important;
 }
 
@@ -25,6 +26,7 @@ li {
 
 .panel-title {
   font-family: 'Questrial', sans-serif;
+  font-weight: bolder;
   font-size: 20px;
 }
 
@@ -127,12 +129,13 @@ li {
 }
 
 .color-box {
-  height: 40px;
-  width: 15px;
+  height: 18px;
+  width: 18px;
   float: left;
   margin-right: 5px;
-  border-radius: 8px;
+  border-radius: 50%;
 }
+
 
 
 /*CLEAR THAT FLOAT IF YOU ADD ANYTHING ELSE HERE*/

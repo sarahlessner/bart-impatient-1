@@ -19,7 +19,7 @@ $( document ).ready(function() {
 	var myTime;
 	//get load number 0-4 from API and access load array at idx of load #
 	//0 load from bart means load info not available
-	var loadArray = ["unavailable", "many seats","few seats","seat unlikely","good luck getting on"];
+	var loadArray = ["unavailable", "many seats","few seats","seat unlikely","HEAVY CROWDS"];
 	var bartKey = 'ZVZV-PH5D-9W3T-DWE9';
 
 
@@ -264,18 +264,18 @@ $( document ).ready(function() {
 				tripLeg.append(tripsArray[i][j][3]+"  -  ");
 				//append final train destination
 				tripLeg.append(finalTrainDest+" "+"Train <br>");
-				//append train crowding(load) info
-				if (loadValue !== "unavailable") {
-					tripLeg.append("Train Crowding: "+loadValue+"<br>");
-				}
+				
 				// tripLeg.append("Train Crowding: "+loadValue+"<br>")
 				// append origin leg
-				tripLeg.append(legOrigin+" "+"<img width='30'src='assets/images/greenarrow.png'>"+" ");
+				tripLeg.append(legOrigin+" "+"<img width='20'src='assets/images/greenarrow.png'>"+" ");
 				// append destination leg
-				tripLeg.append(legDest+" ");
+				tripLeg.append(legDest+"<br>");
+				//append train crowding(load) info
+				if (loadValue === "HEAVY CROWDS") {
+					tripLeg.append("Alert: "+loadValue+"<br>");
+				}
 				//append trip leg(s) to trip option div
 				tripOption.append(tripLeg);
-				// tripOption.append("<br>");
 				//append all trip plan data to HTML
 				$("#trip-plan").append(tripOption);
 			}
