@@ -59,8 +59,17 @@ $( document ).ready(function() {
 			});
 	};
 
-
-	$("#time-selection").timepicker({ 'scrollDefault': 'now' });
+	$(function(){
+    	$('#time-selection').clockface({
+        format: 'h:mm a',
+        trigger: 'manual'
+    	});   
+ 
+    	$('#toggle-btn').click(function(e){   
+        e.stopPropagation();
+        $('#time-selection').clockface('toggle');
+    	});
+	});
 	
 	//hide train schedules as default
 	$("#real-time-container").hide();
@@ -78,13 +87,13 @@ $( document ).ready(function() {
 		//capture station entry values (abbr version of train or station name)
 		originStation = $("#origin-list").val();
 		destinationStation = $("#destination-list").val();
-		//gets time entry values
-		// var ampm = $("#am-pm").val();
+		
 		if ($("#time-selection").val() === "") {
 			myTime = "now";
 		}
 		else {
-			myTime = $("#time-selection").val();
+			myTime = $('#time-selection').clockface('getTime');
+			
 		}
 		
 		if ((originStation === "Select Origin Station") || (destinationStation === "Select Destination Station")) {
@@ -247,7 +256,7 @@ $( document ).ready(function() {
 				var legDest = tripsArray[i][j][1];
 				legDest = convertStationAbbr(legDest);
 				//append arrival time for trip leg origin train
-				tripLeg.append(tripsArray[i][j][3]+"  --  ");
+				tripLeg.append(tripsArray[i][j][3]+"  -  ");
 				//append final train destination
 				tripLeg.append(finalTrainDest+" "+"Train <br>");
 				//append train crowding(load) info
@@ -285,7 +294,7 @@ $( document ).ready(function() {
 			for (var j = 2; j < realTimeArray[i].length; j++) {
 				//minsaway
 				if(j != 2) {
-					etd.append(" -- ");
+					etd.append(" - ");
 				}
 				if (realTimeArray[i][j][0] === "Leaving") {
 					etd.append(realTimeArray[i][j][0]+" ");
@@ -293,7 +302,7 @@ $( document ).ready(function() {
 				else {
 					etd.append(realTimeArray[i][j][0]+"min"+" ");
 				}
-				etd.append(realTimeArray[i][j][1]+" "+"cars");
+				etd.append(" ("+realTimeArray[i][j][1]+" "+"cars)");
 
 				$("#real-time").append(etd);
 			}
