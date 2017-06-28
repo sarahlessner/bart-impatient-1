@@ -127,7 +127,7 @@ $( document ).ready(function() {
 		//validate time inputs
 		timeInput = $('#time-selection').val();
 		//if no time was selected, default to now
-		if ($("#time-selection").val() === "") {
+		if (timeInput === "") {
 			myTime = "now";
 		} else if (validateTime(timeInput)) {
 			//if time is valid store the input 
@@ -153,7 +153,7 @@ $( document ).ready(function() {
 
 	//function to validate time input 
 	function validateTime(timestring) {
-		var checkUserTime = moment(timestring,'h:mm am', true);
+		var checkUserTime = moment(timestring,'h:mm a', true);
 		return checkUserTime.isValid();
 	};
 
