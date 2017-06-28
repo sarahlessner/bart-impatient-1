@@ -85,6 +85,10 @@ $( document ).ready(function() {
         e.stopPropagation();
         $('#time-selection').clockface('toggle');
     	});
+    	$('#time-selection').on("click", function(e){
+    	e.stopPropagation();
+        $('#time-selection').clockface('toggle');
+    	});
 	});
 
 	
