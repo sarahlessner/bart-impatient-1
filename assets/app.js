@@ -45,6 +45,7 @@ $( document ).ready(function() {
 					stationAbbr = response.root.stations.station[i].abbr;
 					stationNameArray.push(stationName);
 					stationAbbrArray.push(stationAbbr);
+					//clean these lists up - DRY
 					//append station list to <ul>origin list
 					originList = $("<option>");
 					originList.addClass("origin-selection");
@@ -85,6 +86,7 @@ $( document ).ready(function() {
         $('#time-selection').clockface('toggle');
     	});
 	});
+
 	
 	//hide train schedules as default
 	$("#real-time-container").hide();
@@ -121,13 +123,19 @@ $( document ).ready(function() {
 		originStation = $("#origin-list").val();
 		destinationStation = $("#destination-list").val();
 		viaStation = $("#via-list").val();
-		
+
+		//validate time inputs
+		manualInput = $('#time-selection').val();
+		clockfaceTime = $('#time-selection').clockface('getTime');
+		//if no time was selected, default to now
 		if ($("#time-selection").val() === "") {
 			myTime = "now";
-		}
-		else {
-			myTime = $('#time-selection').clockface('getTime');
-			
+		} else if (validateTime(clockfaceTime) || validateTime(manualInput)) {
+			//if time is valid store the input 
+			myTime = clockfaceTime;
+		} else {
+			bootbox.alert("Please enter time in 'h:mm a' format");
+			return;
 		}
 		
 		if ((originStation === "Select Origin Station") || (destinationStation === "Select Destination Station")) {
@@ -144,7 +152,11 @@ $( document ).ready(function() {
 	});
 
 
-
+	//function to validate time input 
+	function validateTime(timestring) {
+		var checkUserTime = moment(timestring,'h:mm a', true);
+		return checkUserTime.isValid();
+	};
 
 	// $("#reverse-selection").on("click", function(){
 	// 	originStation = $("#destination-list").val();
