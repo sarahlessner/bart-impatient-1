@@ -11,6 +11,7 @@ $( document ).ready(function() {
 	//store abbreviations from stationAbbrArray that correspond to user selections for origin/dest stations
 	var originStation;
 	var destinationStation;
+	var viaStation;
 	var stationInfo;
 	//multidimensional array storing data from getTripPlan function
 	var tripsArray = [];
@@ -63,10 +64,16 @@ $( document ).ready(function() {
 					stnList.attr("value", stationAbbr);
 					$("#station-list").append(stnList);
 
+					viaList = $("<option>");
+					viaList.addClass("station-selection");
+					viaList.text(stationName);
+					viaList.attr("value", stationAbbr);
+					$("#via-list").append(viaList);
+
 				};
 			});
 	};
-
+	//time input selector
 	$(function(){
     	$('#time-selection').clockface({
         format: 'h:mm a',
@@ -82,6 +89,24 @@ $( document ).ready(function() {
 	//hide train schedules as default
 	$("#real-time-container").hide();
 	$("#trip-plan-container").hide();
+	//hide via station selection and its hide button as default
+	$("#via-list").hide();
+	$(".remove-via").hide();
+	//on click for upstream option
+	$(".upstream-button").on("click", function(){
+		$("#via-list").show();
+		$(".upstream-button").hide();
+		$(".remove-via").show();
+	});
+	//on click to hide upstream field and clear value if entered
+	$(".remove-via").on("click", function(){
+		$("#via-list").hide();
+		$("#via-list").val("placeholder-station");
+		$(".upstream-button").show();
+		$(".remove-via").hide();
+
+	});
+	
 
 	//on click for submit button
 	$("#addTrainBtn").on("click", function(){
@@ -95,6 +120,7 @@ $( document ).ready(function() {
 		//capture station entry values (abbr version of train or station name)
 		originStation = $("#origin-list").val();
 		destinationStation = $("#destination-list").val();
+		viaStation = $("#via-list").val();
 		
 		if ($("#time-selection").val() === "") {
 			myTime = "now";
@@ -206,13 +232,8 @@ $( document ).ready(function() {
 				//loop through ETD info
 				var convertOrig = convertStationAbbr(originStation);
 				$("#real-time-origin").append(convertOrig+" Station - "+" ");
-				for (i = 0; i < etd.length; i++) {
-					//if there is no real time data 
-					if (etd.length === undefined) {
-						//do nothing, only want to show real time container if there's any real time to display
-						return;
-					}
-					else {
+				if (etd) {
+					for (i = 0; i < etd.length; i++) {
 						$("#real-time-container").show();
 						var etdArray = [];
 						//get train line (final dest) and abbrev for all trains
@@ -229,7 +250,7 @@ $( document ).ready(function() {
 							var estimatesArray = [minutesToArrive,trainLength,lineColor];
 							etdArray.push(estimatesArray);
 						}
-					realTimeArray.push(etdArray);	
+						realTimeArray.push(etdArray);	
 					};
 				};
 				
@@ -414,7 +435,18 @@ $( document ).ready(function() {
 	};
 
 	//Station Info Page
-
+	$("#about-station-container").hide();
+	//Station Info page list selector
+	$("#getStnInfo").on("click", function(){
+		event.preventDefault();
+		$("#about-station").empty();
+		$("#station-list-selection").empty();
+		stationInfo = $("#station-list").val();
+		$("#station-list-selection").append(convertStationAbbr(stationInfo));
+		$("#about-station-container").show();
+		getStationInfo();
+	});
+	
 	//BART Station Info API
 	function getStationInfo() {
 		var queryURL = "https://api.bart.gov/api/stn.aspx";
@@ -433,12 +465,7 @@ $( document ).ready(function() {
 		});
 	};
 
-	//Station Info page list selector
-	$("#getStnInfo").on("click", function(){
-		event.preventDefault();
-		stationInfo = $("#station-list").val();
-		getStationInfo();
-	});
+	
 
 });	
 

@@ -67,7 +67,7 @@
 						<form>
 						<!-- list drop downs will always display on page load -->
 						<div class="input-append">
-    						<input type="text" id="time-selection" class="input-small" placeholder="  select time (optional)">
+    						<input type="text" id="time-selection" class="input-small" placeholder="  Select Time (optional)">
     						<button class="timepicker" type="button" id="toggle-btn">
         					<span class="glyphicon glyphicon-time" aria-hidden="true"></span>
     						</button>
@@ -80,7 +80,12 @@
 							<option selected>Select Destination Station</option>
 									<!-- station options list will live here -->
 							</select>
-							<button class="upstream-button btn btn-primary" type="button">Add 'via' Station</button>
+							<select class="form-control" id="via-list">
+							<option id="via-default" value="placeholder-station" selected>Select Via Station</option>
+									<!-- station options list will live here -->
+							</select>
+							<button class="upstream-button btn btn-primary" type="button">Add Via Station</button>
+							<button class="remove-via btn btn-primary" type="button">Remove Via Station</button>
 							
 							<button type="submit" class="btn btn-primary" id="addTrainBtn">Get Trip Plan!</button>
 						</form>
