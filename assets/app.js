@@ -125,14 +125,13 @@ $( document ).ready(function() {
 		viaStation = $("#via-list").val();
 
 		//validate time inputs
-		manualInput = $('#time-selection').val();
-		clockfaceTime = $('#time-selection').clockface('getTime');
+		timeInput = $('#time-selection').val();
 		//if no time was selected, default to now
 		if ($("#time-selection").val() === "") {
 			myTime = "now";
-		} else if (validateTime(clockfaceTime) || validateTime(manualInput)) {
+		} else if (validateTime(timeInput)) {
 			//if time is valid store the input 
-			myTime = clockfaceTime;
+			myTime = timeInput;
 		} else {
 			bootbox.alert("Please enter time in 'h:mm a' format");
 			return;
