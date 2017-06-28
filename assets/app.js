@@ -133,7 +133,7 @@ $( document ).ready(function() {
 			//if time is valid store the input 
 			myTime = timeInput;
 		} else {
-			bootbox.alert("Please enter time in 'h:mm a' format");
+			bootbox.alert("Please enter time in 'h:mm am' format");
 			return;
 		}
 		
@@ -153,7 +153,7 @@ $( document ).ready(function() {
 
 	//function to validate time input 
 	function validateTime(timestring) {
-		var checkUserTime = moment(timestring,'h:mm a', true);
+		var checkUserTime = moment(timestring,'h:mm am', true);
 		return checkUserTime.isValid();
 	};
 
