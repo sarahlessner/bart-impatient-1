@@ -9,6 +9,8 @@
 	<link rel="stylesheet" type="text/css" href="assets/clockface/css/clockface.css">
 	<link href="https://fonts.googleapis.com/css?family=Questrial|Slackey" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Boogaloo|Reem+Kufi" rel="stylesheet">
+
 	<link rel="stylesheet" type="text/css" href="assets/style.css">
   	
 </head>
@@ -70,7 +72,7 @@
     						<input title="defaults to now" type="text" id="time-selection" class="input-small" placeholder="  Select Time (optional)" readonly>
     						<button title="enter time" class="timepicker" type="button" id="toggle-btn">
         					<span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-    						</button><button title="clear time" class="time-clear" type="button">
+    						</button><button title="clear time" id="time-clear" type="button">
         					<span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button>
 						</div>
 							<select class="form-control" id="origin-list">
@@ -84,7 +86,7 @@
 							<select class="form-control" id="destination-list">
 							<option selected>Select Destination Station</option>
 									<!-- station options list will live here -->
-							</select><a id="reverse-selection">Reverse</a><br>
+							</select><a id="reverse-selection"><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span></a><br>
 							
 							<button class="upstream-button btn btn-primary" type="button">Add Via Station</button>
 							<button class="remove-via btn btn-primary" type="button">Remove Via Station</button>

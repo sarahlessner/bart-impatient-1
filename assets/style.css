@@ -4,11 +4,11 @@ body {
 }
 
 .page-title {
-  font-family: 'Prompt', sans-serif;
-  font-size: 40px;
+  font-family: 'Boogaloo', cursive;
+  font-size: 50px;
   font-weight: bolder;
   color: #0083d2 !important;
-  text-shadow: 1px 1px #67b5e4;
+  
 }
 
 .navbar {
@@ -38,9 +38,10 @@ li {
 }
 
 .panel-title {
-  font-family: 'Questrial', sans-serif;
+  /*font-family: 'Questrial', sans-serif;*/
+  font-family: 'Reem Kufi', sans-serif;
   font-weight: bolder;
-  font-size: 20px;
+  font-size: 25px;
 }
 
 .panel-primary {
@@ -71,11 +72,21 @@ li {
   padding: 0;
 }
 
+#time-selection,
+#time-picker,
 #via-list,
 #origin-list,
 #destination-list {
 
-  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+span.glyphicon-transfer {
+  font-size: 30px;
+  transform: scaleX(-1);
+  -moz-transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+  -ms-transform: scaleX(-1);
 }
 
 .form-control:focus {
@@ -83,10 +94,11 @@ li {
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(86,209,185 0.5);
 }
 
-.time-clear,
+#time-clear,
 .timepicker {
   background-color: #0083d2;
-  border-radius: 100%;
+  border-radius: 50%;
+  border: none;
   margin-right: 2px;
 }
 
@@ -111,7 +123,7 @@ li {
 }
 
 #reverse-selection {
-  margin: 5px;
+  margin-top: 20px;
 }
 
 .btn:hover {

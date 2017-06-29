@@ -74,21 +74,30 @@ $( document ).ready(function() {
 				};
 			});
 	};
+
 	//time input selector
+	$('#time-clear').hide();
+	
+
 	$(function(){
     	$('#time-selection').clockface({
         format: 'h:mm a',
         trigger: 'manual'
     	});   
- 
+	        
     	$('#toggle-btn').add('#time-selection').on("click",function(e){   
         e.stopPropagation();
+	        if ($('#time-selection').val() !== "") {
+				$('#time-clear').show();
+			}
         $('#time-selection').clockface('toggle');
     	});
+    	
 	});
 	//clear time
-	$('.time-clear').on("click", function(){
+	$('#time-clear').on("click", function(){
 		$('#time-selection').val('');
+		$('#time-clear').hide();
 	});
 	
 	//hide train schedules as default
