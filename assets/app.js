@@ -81,16 +81,15 @@ $( document ).ready(function() {
         trigger: 'manual'
     	});   
  
-    	$('#toggle-btn').click(function(e){   
+    	$('#toggle-btn').add('#time-selection').on("click",function(e){   
         e.stopPropagation();
         $('#time-selection').clockface('toggle');
     	});
-    	$('#time-selection').on("click", function(e){
-    	e.stopPropagation();
-        $('#time-selection').clockface('toggle');
-    	});
 	});
-
+	//clear time
+	$('.time-clear').on("click", function(){
+		$('#time-selection').val('');
+	});
 	
 	//hide train schedules as default
 	$("#real-time-container").hide();
@@ -110,7 +109,6 @@ $( document ).ready(function() {
 		$("#via-list").val("placeholder-station");
 		$(".upstream-button").show();
 		$(".remove-via").hide();
-
 	});
 	
 
@@ -161,10 +159,17 @@ $( document ).ready(function() {
 		return checkUserTime.isValid();
 	};
 
-	// $("#reverse-selection").on("click", function(){
-	// 	originStation = $("#destination-list").val();
-	// 	destinationStation = $("#origin-list").val();
-	// });
+	$("#reverse-selection").on("click", function(){
+
+		if (($("#origin-list").val() === "Select Origin Station") ||  ($("#destination-list").val() === "Select Destination Station")){
+			return;
+		}
+
+		var placeholder = $("#origin-list").val();
+		$("#origin-list").val($("#destination-list").val());
+		$("#destination-list").val(placeholder);
+		
+	});
 
 	//function calling BARTS schedule info API to get a trip plan based on origin/dest
 	function getTripPlan() {

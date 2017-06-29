@@ -67,10 +67,11 @@
 						<form>
 						<!-- list drop downs will always display on page load -->
 						<div class="input-append">
-    						<input type="text" id="time-selection" class="input-small" placeholder="  Select Time (optional)" readonly>
-    						<button class="timepicker" type="button" id="toggle-btn">
+    						<input title="defaults to now" type="text" id="time-selection" class="input-small" placeholder="  Select Time (optional)" readonly>
+    						<button title="enter time" class="timepicker" type="button" id="toggle-btn">
         					<span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-    						</button>
+    						</button><button title="clear time" class="time-clear" type="button">
+        					<span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button>
 						</div>
 							<select class="form-control" id="origin-list">
 								<option selected>Select Origin Station</option>
@@ -83,7 +84,7 @@
 							<select class="form-control" id="destination-list">
 							<option selected>Select Destination Station</option>
 									<!-- station options list will live here -->
-							</select>
+							</select><a id="reverse-selection">Reverse</a><br>
 							
 							<button class="upstream-button btn btn-primary" type="button">Add Via Station</button>
 							<button class="remove-via btn btn-primary" type="button">Remove Via Station</button>

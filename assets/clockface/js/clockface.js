@@ -304,8 +304,18 @@
           var $target = $(e.target),
               value = $target.hasClass('active') ? null : $target.text();
           if($target.hasClass('inner')) {
+            console.log(this.hour, value);
+            if(value === null)
+              return;
             this.setHour(value);
+            if (this.minute === null)
+              this.setMinute(0);
           } else {
+            console.log(this.minute, value);
+            if(value === null)
+              return;
+            if(this.hour === null)
+              return;
             this.setMinute(value);
           }
 
