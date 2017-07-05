@@ -172,7 +172,7 @@ $( document ).ready(function() {
 			selectionsArray.push([viaStation, destinationStation]);
 		}
 		tripsArray = [];
-		getTripPlan(selectionsArray);
+		getFirstTripPlan(selectionsArray);
 		realTime();
 		$("#trip-plan-container").show();
 	});
@@ -184,18 +184,17 @@ $( document ).ready(function() {
 		return checkUserTime.isValid();
 	};
 	
-
+	var firstTripPlan = 6;
 	//function calling BARTS schedule info API to get a trip plan based on origin/dest
-	function getTripPlan(selections) {
+	function getFirstTripPlan(selections) {
 		console.log(selections);
 		var queryURL = "https://api.bart.gov/api/sched.aspx";
 		var numBeforeReq = 1;
-		var numAfterReq	= 2;
-		if (selectionsIdx != 0) {
+		var numAfterReq	= 4;
+		if ((tripsArray.length !== 0) || (myTime === "now")) {
 			numBeforeReq = 0;
-			numAfterReq = 3;
+			numAfterReq = 4;
 		}
-		console.log("pre-ajax", myTime);
 			$.ajax({
 				data: {
 					cmd: 'depart',
@@ -212,60 +211,127 @@ $( document ).ready(function() {
 				}).done(getTripLegs);
 		
 	};
+	var firstTripIdx = 0;
+	function getViaPlan() {
+		selectionsIdx = 1;
+		tripArrivalTime = tripsArray[firstTripIdx][(tripsArray[firstTripIdx].length-1)][6];
+		var queryURL = "https://api.bart.gov/api/sched.aspx";
+
+			$.ajax({
+				data: {
+					cmd: 'depart',
+					orig: viaStation,
+					dest: destinationStation,
+					time: tripArrivalTime,
+					key: bartKey,
+					b: 0,
+					a: 1,
+					json: 'y'
+				},
+				url: queryURL,
+				method: "GET"
+				}).done(getTripLegs);
+//				}).done(dummyResponse);
+
+
+	};
 
 	function getTripLegs(response) {
-		
-			//for each available route at the station		    	
-			for (var i = 0; i < response.root.schedule.request.trip.length; i++) {
-				//all trip options
-				var myTrip = response.root.schedule.request.trip[i];
-				//array to hold trip leg info from json response
-				var tempArray = [];
-				//array to store leg or legs of trips
-				var legsArray = [];
-				//if the trip plan does not involve a transfer ("leg" is just an object)
-				console.log(myTrip);
-				if(myTrip.leg.length === undefined) {
-					tempArray.push(myTrip.leg);
-				}
-				else{
-					for (var j = 0; j < myTrip.leg.length; j++) {
-						tempArray.push(myTrip.leg[j]);
-					}
-				}
-				console.log(tempArray);
-				for (var k = 0; k < tempArray.length; k++) {
-					var legOrigin = tempArray[k]['@origin'];
-					var legDest = tempArray[k]['@destination'];
-					var finalTrainDest = tempArray[k]['@trainHeadStation'];
-					var legOriginTime = tempArray[k]['@origTimeMin'];
-					if (i === 0) {
-						myTime = tempArray[k]['@destTimeMin'];
-					}
-					var load = tempArray[k]['@load'];
-					var line = tempArray[k]['@line'];
-					var myLeg = [legOrigin, legDest, finalTrainDest, legOriginTime, load, line];
-					if (selectionsIdx === 0) {
-						legsArray.push(myLeg);
-					} else {
-						console.log(i, tripsArray[i]);
-						tripsArray[i].push(myLeg);
-					}
-				}
-				if (selectionsIdx === 0) {
-					tripsArray.push(legsArray);
-				}
-			};
-			console.log(myTime);
-			selectionsIdx++;
-			if (selectionsIdx < selectionsArray.length) {
-				getTripPlan(selectionsArray);
-			} else {
-				displayTrips();	
+		console.log("response", response);
+		//for each available route at the station
+		tempTripsArray = [];
+		var tripPlan = response.root.schedule.request.trip;
+		if (tripPlan.length === undefined) {
+			tempTripsArray.push(tripPlan)
+		} else {
+			for (var h = 0; h < tripPlan.length; h++) {
+				tempTripsArray.push(tripPlan[h]);
+			}
+		}
 
+		for (var i = 0; i < tempTripsArray.length; i++) {
+
+			//all trip options
+			var myTrip = tempTripsArray[i];
+			//array to hold trip leg info from json response
+			var tempLegsArray = [];
+			//array to store leg or legs of trips
+			var legsArray = [];
+			//if the trip plan does not involve a transfer ("leg" is just an object)
+			console.log("trip", myTrip);
+			if(myTrip.leg.length === undefined) {
+				tempLegsArray.push(myTrip.leg);
+			}
+			else{
+				for (var j = 0; j < myTrip.leg.length; j++) {
+					tempLegsArray.push(myTrip.leg[j]);
+				}
+			}
+			console.log(tempLegsArray);
+			for (var k = 0; k < tempLegsArray.length; k++) {
+				var legOrigin = tempLegsArray[k]['@origin'];
+				var legDest = tempLegsArray[k]['@destination'];
+				var finalTrainDest = tempLegsArray[k]['@trainHeadStation'];
+				var legOriginTime = tempLegsArray[k]['@origTimeMin'];
+				var legDestTime = tempLegsArray[k]['@destTimeMin'];
+				if (k === 0) {
+					myTime = legOriginTime;
+				}
+				console.log("origTimeMin", myTime);
+				var load = tempLegsArray[k]['@load'];
+				var line = tempLegsArray[k]['@line'];
+				var myLeg = [legOrigin, legDest, finalTrainDest, legOriginTime, load, line, legDestTime];
+				if (selectionsIdx === 0) {
+					legsArray.push(myLeg);
+				} else {
+				 	console.log(tripsArray.length + " " + firstTripIdx);
+				 	tripsArray[firstTripIdx].push(myLeg);
+				}
+			}
+			if (selectionsIdx === 0 && !isTripDupe(legsArray)) {
+				tripsArray.push(legsArray);
 			}
 
+		};		
+		if (selectionsIdx !== 0)
+			firstTripIdx++;
 
+		console.log(myTime);
+
+		if (tripsArray.length < firstTripPlan) {
+			getFirstTripPlan(selectionsArray);
+			firstTripIdx = 0;
+		} else if (selectionsArray.length === 2 && firstTripIdx < tripsArray.length) {
+			//displayTrips();
+			getViaPlan();
+
+		} else {
+			displayTrips();
+		}
+
+	};
+
+	function dummyResponse(response)
+	{
+
+	}
+
+	//check for duplicate trips
+	function isTripDupe(newTripArr) {
+		var newTripString = newTripArr.toString();
+		for (var i = 0; i < tripsArray.length; i++) {
+			var oldTripString = tripsArray[i].toString();
+			console.log("oldTrip"+i+"="+oldTripString+" vs newTrip="+newTripString);
+			if(oldTripString == newTripString)
+				return true;
+		}
+		/*
+		if (($.inArray(newTripArr, tripsArray)) === -1){
+		return false;
+		} else
+		return true;
+		*/
+		return false;
 	};
 
 	//function to call BART API for real time train data
@@ -360,7 +426,9 @@ $( document ).ready(function() {
 				// append origin leg
 				tripLeg.append(legOrigin+" "+"<img width='20'src='assets/images/greenarrow.png'>"+" ");
 				// append destination leg
-				tripLeg.append(legDest+"<br>");
+				tripLeg.append(legDest);
+				//append arrival time  @ destination
+				tripLeg.append(" - "+tripsArray[i][j][6]+"<br>");
 				//append train crowding(load) info
 				if (loadValue === "HEAVY CROWDS") {
 					tripLeg.append("Alert: "+loadValue+"<br>");
