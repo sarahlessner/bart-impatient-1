@@ -52,6 +52,7 @@ li {
 
 .panel {
   background: black;
+
 }
 
 #time-selection {
@@ -81,7 +82,7 @@ li {
 #origin-list,
 #destination-list {
   margin-top: 8px;
-  width: 97%;
+  width: 98%;
 }
 
 
@@ -94,8 +95,12 @@ li {
   color: white;
 }
 
+.glyphicon-sort:before {
+    margin-left: -6px;
+}
 
 span.glyphicon-sort {
+
   float:right;
   font-size: 20px;
   transform: scaleX(-1);
@@ -104,6 +109,8 @@ span.glyphicon-sort {
   -ms-transform: scaleX(-1);
   
 }
+
+
 
 
 .form-control:focus {
@@ -145,7 +152,7 @@ span.glyphicon-sort {
 }
 
 #reverse-selection {
-  margin-top: 20px;
+  /*margin-top: 20px;*/
 }
 
 .btn:hover {
@@ -192,8 +199,19 @@ span.glyphicon-sort {
 }
  
 p {
+  clear:both;
   font-style: italic;
 }
 
 
-/*CLEAR THAT FLOAT IF YOU ADD ANYTHING ELSE HERE*/
+/*MEDIA TAGS*/
+
+@media only screen and (max-width : 480px) {
+
+  #via-list,
+  #origin-list,
+  #destination-list {
+    width: 93%;
+  }
+
+}
