@@ -68,9 +68,9 @@
 						<form>
 						<!-- list drop downs will always display on page load -->
 						<div class="input-append">
-    						<input title="defaults to now" type="text" id="time-selection" class="input-small" placeholder="  Select Time (optional)" readonly>
-    						<button title="enter time" class="timepicker" type="button" id="toggle-btn">
-        					<span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+							
+    						<input title="defaults to now" type="text" id="time-selection" class="input-small" placeholder="  click to select time" readonly>
+    						<button title="enter time (optional)" class="timepicker" type="button" id="toggle-btn"><span class="glyphicon glyphicon-time" aria-hidden="true"></span></button>
     						</button><button title="clear time" id="time-clear" type="button">
         					<span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button>
 						</div>
@@ -78,17 +78,21 @@
 								<option selected>Select Origin Station</option>
 									<!-- station options list will live here -->
 							</select>
+							<a id="reverse-selection"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span></a>
 							<!-- optional via point field -->
 							<select class="form-control" id="via-list">
 							<option id="via-default" value="placeholder-station" selected>Select Via Station</option>
 							</select>
+							
 							<select class="form-control" id="destination-list">
 							<option selected>Select Destination Station</option>
-									<!-- station options list will live here -->
-							</select><a id="reverse-selection"><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span></a><br>
+							</select>
 							
-							<button class="upstream-button btn btn-primary" type="button">Add Via Station</button>
-							<button class="remove-via btn btn-primary" type="button">Remove Via Station</button>
+							<a class="via-toggle">Add/Remove Via Station</a><br>
+							
+							
+							
+							
 							
 							<button type="submit" class="btn btn-primary" id="addTrainBtn">Get Trip Plan!</button>
 						</form>
@@ -107,7 +111,7 @@
 
 				<div class="panel panel-primary">
 					<div class="panel-heading">
-						<h3 class="panel-title"><span id="real-time-origin"></span> Real Time</h3>
+						<h3 class="panel-title"><span id="real-time-origin"></span> Trains Arriving</h3>
 					</div>
 
 					<div class="panel-body trip-container">
@@ -125,15 +129,15 @@
 		<div class="row">
 			<div class="selection-panel col-md-12">
 
-				<div class="panel panel-primary">
+				<div class="trip-plan-panel panel panel-primary">
 					<div class="panel-heading">
-						<h3 class="panel-title">Custom Trip Plan</h3>
+						<h3 class="panel-title">Trip Plan</h3>
 					</div>
-
 					<div class="panel-body trip-container">
-						<div id="trip-plan">
+						<div id="trip-plan"></div>
 					</div>
 				</div>
+				<p> Please note: 'Trip Plan' is based on scheduled data which is subject to change. Refer to 'Trains Arriving' (above) for real time data</p>
 			</div>
 		</div>
 	</div>

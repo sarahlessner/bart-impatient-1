@@ -126,6 +126,8 @@
           }
         },
 
+        
+
          /*
         Set time of clockface. Am/pm will be set automatically.
         Value can be Date object or string

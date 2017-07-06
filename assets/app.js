@@ -78,20 +78,28 @@ $( document ).ready(function() {
         format: 'h:mm a',
         trigger: 'manual'
     	});   
-	        
-    	$('#toggle-btn').add('#time-selection').on("click",function(e){   
-        e.stopPropagation();
-	        if ($('#time-selection').val() !== "") {
-				$('#time-clear').show();
-			}
-        $('#time-selection').clockface('toggle');
+
+    	$('#time-selection').hide();
+
+    	$('#toggle-btn').on("click", function(){
+    		$('#time-selection').toggle('fast');
+    		$('#time-selection').val('');
+    		$('#toggle-btn').hide();
+    		$('#time-clear').show();
+    	});
+
+    	$('#time-selection').on("click",function(e){   
+	        e.stopPropagation();
+	        $('#time-selection').clockface('toggle');
     	});
     	
 	});
 	//clear time
 	$('#time-clear').on("click", function(){
 		$('#time-selection').val('');
+		$('#time-selection').toggle('fast');
 		$('#time-clear').hide();
+		$('#toggle-btn').show();
 	});
 	
 	//hide train schedules as default
@@ -110,20 +118,28 @@ $( document ).ready(function() {
 	});
 	//hide via station selection and its hide button as default
 	$("#via-list").hide();
-	$(".remove-via").hide();
-	//on click for upstream option
-	$(".upstream-button").on("click", function(){
-		$("#via-list").show();
-		$(".upstream-button").hide();
-		$(".remove-via").show();
+
+	$(".via-toggle").on("click", function() {
+		$("#reverse-selection").toggle();
+		$("#via-list").slideToggle('fast', function() {
+			$("#via-list").val("placeholder-station");
+		});
+
 	});
-	//on click to hide upstream field and clear value if entered
-	$(".remove-via").on("click", function(){
-		$("#via-list").hide();
-		$("#via-list").val("placeholder-station");
-		$(".upstream-button").show();
-		$(".remove-via").hide();
-	});
+	// $(".remove-via").hide();
+	// //on click for upstream option
+	// $(".upstream-button").on("click", function(){
+	// 	$("#via-list").show();
+	// 	$(".upstream-button").hide();
+	// 	$(".remove-via").show();
+	// });
+	// //on click to hide upstream field and clear value if entered
+	// $(".remove-via").on("click", function(){
+	// 	$("#via-list").hide();
+	// 	$("#via-list").val("placeholder-station");
+	// 	$(".upstream-button").show();
+	// 	$(".remove-via").hide();
+	// });
 	
 	var selectionsArray = [];
 	var selectionsIdx = 0;
