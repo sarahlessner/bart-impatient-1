@@ -37,9 +37,9 @@
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->
 
-	<!--   <div>
-	  	<img src="assets/images/bart-train.png">
-	  </div> -->
+	  <div>
+	  	<img class=bart-train src="assets/images/bart-train.png">
+	  </div>
 	</nav>
 	
 	<!-- SERVICE ADVISORIES ID service-advisories -->
@@ -123,6 +123,33 @@
 		</div>
 	</div>
 
+	<div class="container" id="via-rt-panel">
+		<div class="row">
+			<div class="selection-panel col-md-12">
+
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title"><span id="via-real-time-origin"></span> Trains Arriving</h3>
+					</div>
+
+					<div class="panel-body trip-container">
+						<div id="via-real-time">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!-- <div class="panel-heading" id="via-rt-panel">
+						<h3 class="panel-title"><span id="via-real-time-origin"></span> Trains Arriving</h3>
+					</div>
+
+					<div class="panel-body trip-container" id="via-rt-panel">
+						<div id="via-real-time">
+						</div>
+					</div> -->
+
 	<!--SCHEDULE DATA - WILL DISPLAY USERS TRIP PLANS #trip-plan -->
 
 	<div class="container" id="trip-plan-container">
@@ -131,13 +158,13 @@
 
 				<div class="trip-plan-panel panel panel-primary">
 					<div class="panel-heading">
-						<h3 class="panel-title">Trip Plan</h3>
+						<h3 class="panel-title">Trip Plans</h3>
 					</div>
 					<div class="panel-body trip-container">
 						<div id="trip-plan"></div>
 					</div>
 				</div>
-				<p> Please note: 'Trip Plan' is based on scheduled data which is subject to change. Refer to 'Trains Arriving' (above) for real time data</p>
+				<p> Please note: 'Trip Plans' are based on scheduled data which is subject to change. Refer to 'Trains Arriving' for real time data</p>
 			</div>
 		</div>
 	</div>

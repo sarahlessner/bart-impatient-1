@@ -17,6 +17,8 @@ $( document ).ready(function() {
 	var tripsArray = [];
 	//multidimensional array storing data from realTime function
 	var realTimeArray = [];
+	//store via stations in array if applicable
+	var viaRealTimeArray = [];
 	//captures time if user inputs one. defaults to parameter "now"
 	var myTime;
 	//get load number 0-4 from API and access load array at idx of load #
@@ -104,6 +106,7 @@ $( document ).ready(function() {
 	
 	//hide train schedules as default
 	$("#real-time-container").hide();
+	$("#via-rt-panel").hide();
 	$("#trip-plan-container").hide();
 	//swap origin/destination (reverse)
 	$("#reverse-selection").on("click", function(){
@@ -126,32 +129,23 @@ $( document ).ready(function() {
 		});
 
 	});
-	// $(".remove-via").hide();
-	// //on click for upstream option
-	// $(".upstream-button").on("click", function(){
-	// 	$("#via-list").show();
-	// 	$(".upstream-button").hide();
-	// 	$(".remove-via").show();
-	// });
-	// //on click to hide upstream field and clear value if entered
-	// $(".remove-via").on("click", function(){
-	// 	$("#via-list").hide();
-	// 	$("#via-list").val("placeholder-station");
-	// 	$(".upstream-button").show();
-	// 	$(".remove-via").hide();
-	// });
 	
 	var selectionsArray = [];
 	var selectionsIdx = 0;
 	//on click for submit button
 	$("#addTrainBtn").on("click", function(){
 		event.preventDefault();
-		//empty trip-plan and real-time divs
+		//empty all trip-plan and real-time
 		$("#real-time-container").hide();
+		$("#via-rt-panel").hide();
+		realTimeArray = [];
+		viaRealTimeArray = [];
 		$("#trip-plan-container").hide();
 		$("#trip-plan").empty();
 		$("#real-time").empty();
+		$("#via-real-time").empty();
 		$("#real-time-origin").empty();
+		$("#via-real-time-origin").empty();
 		//capture station entry values (abbr version of train or station name)
 		originStation = $("#origin-list").val();
 		destinationStation = $("#destination-list").val();
@@ -186,10 +180,16 @@ $( document ).ready(function() {
 		} else {
 			selectionsArray.push([originStation, viaStation]);
 			selectionsArray.push([viaStation, destinationStation]);
+			
 		}
 		tripsArray = [];
 		getFirstTripPlan(selectionsArray);
 		realTime();
+		var convertOrig = convertStationAbbr(originStation);
+		var convertVia = convertStationAbbr(viaStation);
+		//append station name(s) to panel heading
+		$("#real-time-origin").append(convertOrig+" Station - "+" ");
+		$("#via-real-time-origin").append(convertVia+" Station - "+" ");
 		$("#trip-plan-container").show();
 	});
 
@@ -228,6 +228,7 @@ $( document ).ready(function() {
 		
 	};
 	var firstTripIdx = 0;
+	//function to get trip plan from via - dest if applicable
 	function getViaPlan() {
 		selectionsIdx = 1;
 		tripArrivalTime = tripsArray[firstTripIdx][(tripsArray[firstTripIdx].length-1)][6];
@@ -251,7 +252,7 @@ $( document ).ready(function() {
 
 
 	};
-
+	//function to get trip legs for orig OR via to dest
 	function getTripLegs(response) {
 		console.log("response", response);
 		//for each available route at the station
@@ -327,11 +328,6 @@ $( document ).ready(function() {
 
 	};
 
-	function dummyResponse(response)
-	{
-
-	}
-
 	//check for duplicate trips
 	function isTripDupe(newTripArr) {
 		var newTripString = newTripArr.toString();
@@ -341,18 +337,12 @@ $( document ).ready(function() {
 			if(oldTripString == newTripString)
 				return true;
 		}
-		/*
-		if (($.inArray(newTripArr, tripsArray)) === -1){
-		return false;
-		} else
-		return true;
-		*/
+	
 		return false;
 	};
 
 	//function to call BART API for real time train data
 	function realTime() {
-
 		var queryURL = "https://api.bart.gov/api/etd.aspx";
 
 		$.ajax({
@@ -364,39 +354,74 @@ $( document ).ready(function() {
 			},
 			url: queryURL,
 			method: "GET"
-			}).done(function(response) {
-				realTimeArray = [];
-				//get all real time data at the origin station
-				var allRealTime = response.root.station[0];
-				// console.log("all real time", allRealTime);
-				var etd = allRealTime.etd;
-				//loop through ETD info
-				var convertOrig = convertStationAbbr(originStation);
-				$("#real-time-origin").append(convertOrig+" Station - "+" ");
-				if (etd) {
-					for (i = 0; i < etd.length; i++) {
-						$("#real-time-container").show();
-						var etdArray = [];
-						//get train line (final dest) and abbrev for all trains
-						var allRealTimeDest = etd[i].destination;
-						var allRealTimeAbbr = etd[i].abbreviation;
-						var allEstimates = etd[i].estimate;
-						etdArray.push(allRealTimeDest, allRealTimeAbbr);
-						//loop through estimate information for all specific trains arriving
-						for (j = 0; j < allEstimates.length; j++) {
-							var minutesToArrive = allEstimates[j].minutes;
-							var trainLength = allEstimates[j]['length'];
-							var lineColor = allEstimates[j].hexcolor;
-							// console.log("minutesToArrive", minutesToArrive, "trainLength", trainLength, "lineColor", lineColor);
-							var estimatesArray = [minutesToArrive,trainLength,lineColor];
-							etdArray.push(estimatesArray);
-						}
-						realTimeArray.push(etdArray);	
-					};
-				};
-				
-				displayRealTime();	 	
-			});
+			}).done(getRealTime);
+	};
+	//function to get real time data at via station
+	function viaRealTime() {
+		var queryURL = "https://api.bart.gov/api/etd.aspx";
+
+		$.ajax({
+			data: {
+				cmd: 'etd',
+				orig: viaStation,
+				key: bartKey,
+				json: 'y'
+			},
+			url: queryURL,
+			method: "GET"
+			}).done(getRealTime);
+	};
+	//function that stores real time data from API
+	function getRealTime(response) {
+		//get all real time data at the origin station
+		var allRealTime = response.root.station[0];
+		// console.log("all real time", allRealTime);
+		var etd = allRealTime.etd;
+		//loop through ETD info
+		var etdArray = [];
+		var viaEtdArray = [];
+
+		if (etd) {
+			$("#real-time-container").show();
+			for (i = 0; i < etd.length; i++) {
+				//get train line (final dest) and abbrev for all trains
+				var allRealTimeDest = etd[i].destination;
+				var allRealTimeAbbr = etd[i].abbreviation;
+				var allEstimates = etd[i].estimate;
+				console.log("realtimeArray length", realTimeArray.length);
+				if (realTimeArray.length === 0) {
+					etdArray.push(allRealTimeDest, allRealTimeAbbr);
+				} else {
+					viaEtdArray.push(allRealTimeDest, allRealTimeAbbr);
+				}
+				//loop through estimate information for all specific trains arriving
+				for (j = 0; j < allEstimates.length; j++) {
+					var minutesToArrive = allEstimates[j].minutes;
+					var trainLength = allEstimates[j]['length'];
+					var lineColor = allEstimates[j].hexcolor;
+					// console.log("minutesToArrive", minutesToArrive, "trainLength", trainLength, "lineColor", lineColor);
+					var estimatesArray = [minutesToArrive,trainLength,lineColor];
+					if (realTimeArray.length === 0) {
+						etdArray.push(estimatesArray);
+					} else {
+					viaEtdArray.push(estimatesArray);
+					}	
+				} 
+				if (realTimeArray.length === 0)	{
+					realTimeArray.push(etdArray);
+				} else {
+					viaRealTimeArray.push(viaEtdArray);
+
+				}	
+			};
+		};
+			if (viaRealTimeArray.length !== 0) {
+				displayRealTime(viaRealTimeArray);
+				$('#via-rt-panel').show();
+			} else {
+				displayRealTime(realTimeArray);
+			}
+			 	
 	};
 
 	//function to display data from getTripPlan function
@@ -457,34 +482,39 @@ $( document ).ready(function() {
 		}
 	};
 	//function to display the data from realTime function
-	function displayRealTime() {
+	function displayRealTime(realTime) {
+		console.log("what is real time", realTime);
 		//loop through array containing all etd data 
-		for (var i = 0; i < realTimeArray.length; i++) {
+		for (var i = 0; i < realTime.length; i++) {
 			//create a div for each piece of ETD data
 			// var etd = $("<div>");
 			var etd = $("<div>");
 			etd.addClass("etd-train");
 			var colorBox = $("<div>");
 			colorBox.css({
-				'background-color': realTimeArray[i][2][2],
+				'background-color': realTime[i][2][2],
 			}).addClass("color-box");
 			etd.append(colorBox);
-			etd.append(realTimeArray[i][0]+"<br>");
+			etd.append(realTime[i][0]+"<br>");
 			//looping through all train level estimate data for the origin station
-			for (var j = 2; j < realTimeArray[i].length; j++) {
+			for (var j = 2; j < realTime[i].length; j++) {
 				//minsaway
 				if(j != 2) {
 					etd.append(" - ");
 				}
-				if (realTimeArray[i][j][0] === "Leaving") {
-					etd.append(realTimeArray[i][j][0]+" ");
+				if (realTime[i][j][0] === "Leaving") {
+					etd.append(realTime[i][j][0]+" ");
 				}
 				else {
-					etd.append(realTimeArray[i][j][0]+"min"+" ");
+					etd.append(realTime[i][j][0]+"min"+" ");
 				}
-				etd.append(" ("+realTimeArray[i][j][1]+" "+"cars)");
-
-				$("#real-time").append(etd);
+				etd.append(" ("+realTime[i][j][1]+" "+"cars)");
+				if ($("#real-time").is(':empty') === false) {
+					$("#via-real-time").append(etd);
+				} else {
+					$("#real-time").append(etd);
+					viaRealTime();
+				}
 			}
 		}
 	};

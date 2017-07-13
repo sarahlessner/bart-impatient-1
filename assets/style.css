@@ -11,6 +11,14 @@ body {
   
 }
 
+.bart-train {
+    width: 20%;
+    float: right;
+    position: absolute;
+    top: 0;
+    right: 300px;
+}
+
 .navbar {
   border-radius: 0;
 /*  background-image: url("images/bart-train.png");
@@ -30,6 +38,7 @@ body {
 li {
   list-style: none;
 }
+
 
 .panel-primary>.panel-heading {
   color: #fff;
@@ -211,7 +220,11 @@ p {
   #via-list,
   #origin-list,
   #destination-list {
-    width: 93%;
+    width: 94%;
+  }
+
+  .bart-train {
+    display: none;
   }
 
 }
