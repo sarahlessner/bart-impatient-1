@@ -19,8 +19,7 @@ $( document ).ready(function() {
 	var realTimeArray = [];
 	//store via stations in array if applicable
 	var viaRealTimeArray = [];
-	//keep track of times getRealTime is called to determine if origin or via station info
-	var getRealTimeCount = 0;
+
 	//captures time if user inputs one. defaults to parameter "now"
 	var myTime;
 	//get load number 0-4 from API and access load array at idx of load #
@@ -131,20 +130,24 @@ $( document ).ready(function() {
 		});
 
 	});
-	
+
+	$('#show-planner').hide();
 	var selectionsArray = [];
 	var selectionsIdx = 0;
 	//on click for submit button
 	$("#addTrainBtn").on("click", function(){
 		event.preventDefault();
+		//hide trip planner
+		$(".trip-white").slideUp('slow');
 		//empty all trip-plan and real-time
+		getRealTimeCount = 0;
 		$("#real-time-container").hide();
+		$('#show-planner').show();
 		$("#via-rt-panel").hide();
 		realTimeArray = [];
 		viaRealTimeArray = [];
 		$("#trip-plan-container").hide();
 		$("#trip-plan").empty();
-		getRealTimeCount = 0;
 		$("#real-time").empty();
 		$("#via-real-time").empty();
 		$("#real-time-origin").empty();
@@ -180,14 +183,16 @@ $( document ).ready(function() {
 		selectionsIdx = 0;
 		if (viaStation === "placeholder-station") {
 			selectionsArray.push([originStation, destinationStation]);
+			realTime(originStation);
 		} else {
 			selectionsArray.push([originStation, viaStation]);
 			selectionsArray.push([viaStation, destinationStation]);
-			
+			realTime(originStation);
+			realTime(viaStation);	
 		}
 		tripsArray = [];
 		getFirstTripPlan(selectionsArray);
-		realTime();
+		
 		var convertOrig = convertStationAbbr(originStation);
 		var convertVia = convertStationAbbr(viaStation);
 		//append station name(s) to panel heading
@@ -196,6 +201,11 @@ $( document ).ready(function() {
 		$("#trip-plan-container").show();
 	});
 
+	$('#show-planner').on('click', function(){
+		$('.trip-white').slideDown('slow');
+		$('#show-planner').hide();
+
+	});
 
 	//function to validate time input 
 	function validateTime(timestring) {
@@ -251,9 +261,6 @@ $( document ).ready(function() {
 				url: queryURL,
 				method: "GET"
 				}).done(getTripLegs);
-//				}).done(dummyResponse);
-
-
 	};
 	//function to get trip legs for orig OR via to dest
 	function getTripLegs(response) {
@@ -343,15 +350,16 @@ $( document ).ready(function() {
 	
 		return false;
 	};
-
+	var getRealTimeCount = 0;
 	//function to call BART API for real time train data
-	function realTime() {
+	function realTime(station) {
+		
 		var queryURL = "https://api.bart.gov/api/etd.aspx";
 
 		$.ajax({
 			data: {
 				cmd: 'etd',
-				orig: originStation,
+				orig: station,
 				key: bartKey,
 				json: 'y'
 			},
@@ -359,24 +367,11 @@ $( document ).ready(function() {
 			method: "GET"
 			}).done(getRealTime);
 	};
-	//function to get real time data at via station
-	function viaRealTime() {
-		var queryURL = "https://api.bart.gov/api/etd.aspx";
-
-		$.ajax({
-			data: {
-				cmd: 'etd',
-				orig: viaStation,
-				key: bartKey,
-				json: 'y'
-			},
-			url: queryURL,
-			method: "GET"
-			}).done(getRealTime);
-	};
-	//function that stores real time data from API
+	
 	function getRealTime(response) {
+
 		getRealTimeCount++;
+		console.log("get real time count", getRealTimeCount);
 		//get all real time data at the origin station
 		var allRealTime = response.root.station[0];
 		// console.log("all real time", allRealTime);
@@ -392,7 +387,7 @@ $( document ).ready(function() {
 				var allRealTimeAbbr = etd[i].abbreviation;
 				var allEstimates = etd[i].estimate;
 		
-				if ($("#real-time").is(':empty') === true) {
+				if (getRealTimeCount === 1) {
 					etdArray.push(allRealTimeDest, allRealTimeAbbr);
 				} else {
 					viaEtdArray.push(allRealTimeDest, allRealTimeAbbr);
@@ -404,21 +399,21 @@ $( document ).ready(function() {
 					var lineColor = allEstimates[j].hexcolor;
 					// console.log("minutesToArrive", minutesToArrive, "trainLength", trainLength, "lineColor", lineColor);
 					var estimatesArray = [minutesToArrive,trainLength,lineColor];
-					if ($("#real-time").is(':empty') === true) {
+					if (getRealTimeCount === 1) {
 						etdArray.push(estimatesArray);
 					} else {
 						viaEtdArray.push(estimatesArray);
 					}	
 				} 
 				console.log("get realtime ETDArr", etdArray);
-				if ($("#real-time").is(':empty') === true)	{
+				if (getRealTimeCount === 1)	{
 					realTimeArray.push(etdArray);
 				} else {
 					viaRealTimeArray.push(viaEtdArray);
 				}	
 			};
 
-			if ($("#real-time").is(':empty') === true) {
+			if (getRealTimeCount === 1) {
 				displayRealTime(realTimeArray);				
 			} else {
 				displayRealTime(viaRealTimeArray);
@@ -521,9 +516,8 @@ $( document ).ready(function() {
 				}
 			}
 		}
-		if ((getRealTimeCount === 1) && ($("#via-list").val !== "placeholder-station")); {
-			viaRealTime();
-		}
+		console.log("real time count", getRealTimeCount);
+		console.log("via list value", viaStation );
 	};
 
 	//function to look up a train name abbreviation and access its display name
@@ -645,7 +639,6 @@ $( document ).ready(function() {
 		});
 	};
 
-	
 
 });	
 

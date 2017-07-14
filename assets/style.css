@@ -17,14 +17,13 @@ body {
     position: absolute;
     top: 0;
     right: 300px;
+    margin-top: 3px;
 }
 
 .navbar {
+  clear: both;
   border-radius: 0;
-/*  background-image: url("images/bart-train.png");
-  background-size: 300px auto;
-  background-repeat: no-repeat;
-  background-position: 70% 30%;*/
+  background-color: white;
 
 }
 
@@ -33,6 +32,18 @@ body {
 .navbar-inverse .navbar-nav>.active>a:hover {
     color: #fff;
     background-color: #0083d2;
+}
+
+.trip-white {
+  background: whitesmoke;
+}
+
+#show-planner {
+  text-align: center;
+}
+
+a {
+  cursor: pointer;
 }
 
 li {
@@ -119,7 +130,9 @@ span.glyphicon-sort {
   
 }
 
-
+span.glyphicon-triangle-bottom {
+  text-align: center;
+}
 
 
 .form-control:focus {

@@ -55,7 +55,7 @@
 			
 	<!-- form area for user selections -->
 
-	<div class="container">
+	<div class="container" id="plan-a-trip">
 		<div class="row">
 			<div class="selection-panel col-md-12">
 
@@ -63,8 +63,10 @@
 					<div class="panel-heading">
 						<h3 class="panel-title">Plan a Trip</h3>
 					</div>
-
-					<div class="panel-body">
+					<div id="show-planner">
+						<a><span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span></a>
+					</div>
+					<div class="panel-body trip-white">
 						<form>
 						<!-- list drop downs will always display on page load -->
 						<div class="input-append">
@@ -89,11 +91,7 @@
 							</select>
 							
 							<a class="via-toggle">Add/Remove Via Station</a><br>
-							
-							
-							
-							
-							
+
 							<button type="submit" class="btn btn-primary" id="addTrainBtn">Get Trip Plan!</button>
 						</form>
 					</div>
@@ -101,7 +99,6 @@
 			</div>
 		</div>
 	</div>
-
 
 
 	<!-- REAL TIME DATA - WILL DISPLAY ALL TRAINS AT ORIGIN STATION ID #real-time-->
