@@ -19,6 +19,8 @@ $( document ).ready(function() {
 	var realTimeArray = [];
 	//store via stations in array if applicable
 	var viaRealTimeArray = [];
+	//keep track of times getRealTime is called to determine if origin or via station info
+	var getRealTimeCount = 0;
 	//captures time if user inputs one. defaults to parameter "now"
 	var myTime;
 	//get load number 0-4 from API and access load array at idx of load #
@@ -142,6 +144,7 @@ $( document ).ready(function() {
 		viaRealTimeArray = [];
 		$("#trip-plan-container").hide();
 		$("#trip-plan").empty();
+		getRealTimeCount = 0;
 		$("#real-time").empty();
 		$("#via-real-time").empty();
 		$("#real-time-origin").empty();
@@ -200,7 +203,7 @@ $( document ).ready(function() {
 		return checkUserTime.isValid();
 	};
 	
-	var firstTripPlan = 6;
+	var firstTripPlan = 5;
 	//function calling BARTS schedule info API to get a trip plan based on origin/dest
 	function getFirstTripPlan(selections) {
 		console.log(selections);
@@ -373,23 +376,23 @@ $( document ).ready(function() {
 	};
 	//function that stores real time data from API
 	function getRealTime(response) {
+		getRealTimeCount++;
 		//get all real time data at the origin station
 		var allRealTime = response.root.station[0];
 		// console.log("all real time", allRealTime);
 		var etd = allRealTime.etd;
-		//loop through ETD info
-		var etdArray = [];
-		var viaEtdArray = [];
-
+		//loop through ETD info (if there is an etd)
 		if (etd) {
 			$("#real-time-container").show();
 			for (i = 0; i < etd.length; i++) {
+				var etdArray = [];
+				var viaEtdArray = [];
 				//get train line (final dest) and abbrev for all trains
 				var allRealTimeDest = etd[i].destination;
 				var allRealTimeAbbr = etd[i].abbreviation;
 				var allEstimates = etd[i].estimate;
-				console.log("realtimeArray length", realTimeArray.length);
-				if (realTimeArray.length === 0) {
+		
+				if ($("#real-time").is(':empty') === true) {
 					etdArray.push(allRealTimeDest, allRealTimeAbbr);
 				} else {
 					viaEtdArray.push(allRealTimeDest, allRealTimeAbbr);
@@ -401,27 +404,28 @@ $( document ).ready(function() {
 					var lineColor = allEstimates[j].hexcolor;
 					// console.log("minutesToArrive", minutesToArrive, "trainLength", trainLength, "lineColor", lineColor);
 					var estimatesArray = [minutesToArrive,trainLength,lineColor];
-					if (realTimeArray.length === 0) {
+					if ($("#real-time").is(':empty') === true) {
 						etdArray.push(estimatesArray);
 					} else {
-					viaEtdArray.push(estimatesArray);
+						viaEtdArray.push(estimatesArray);
 					}	
 				} 
-				if (realTimeArray.length === 0)	{
+				console.log("get realtime ETDArr", etdArray);
+				if ($("#real-time").is(':empty') === true)	{
 					realTimeArray.push(etdArray);
 				} else {
 					viaRealTimeArray.push(viaEtdArray);
-
 				}	
 			};
-		};
-			if (viaRealTimeArray.length !== 0) {
+
+			if ($("#real-time").is(':empty') === true) {
+				displayRealTime(realTimeArray);				
+			} else {
 				displayRealTime(viaRealTimeArray);
 				$('#via-rt-panel').show();
-			} else {
-				displayRealTime(realTimeArray);
 			}
-			 	
+		};
+					 	
 	};
 
 	//function to display data from getTripPlan function
@@ -483,7 +487,6 @@ $( document ).ready(function() {
 	};
 	//function to display the data from realTime function
 	function displayRealTime(realTime) {
-		console.log("what is real time", realTime);
 		//loop through array containing all etd data 
 		for (var i = 0; i < realTime.length; i++) {
 			//create a div for each piece of ETD data
@@ -509,13 +512,17 @@ $( document ).ready(function() {
 					etd.append(realTime[i][j][0]+"min"+" ");
 				}
 				etd.append(" ("+realTime[i][j][1]+" "+"cars)");
-				if ($("#real-time").is(':empty') === false) {
-					$("#via-real-time").append(etd);
-				} else {
+
+				if (getRealTimeCount === 1) {
 					$("#real-time").append(etd);
-					viaRealTime();
+				} else {
+					$("#via-real-time").append(etd);
+			
 				}
 			}
+		}
+		if ((getRealTimeCount === 1) && ($("#via-list").val !== "placeholder-station")); {
+			viaRealTime();
 		}
 	};
 
