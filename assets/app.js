@@ -183,16 +183,15 @@ $( document ).ready(function() {
 		selectionsIdx = 0;
 		if (viaStation === "placeholder-station") {
 			selectionsArray.push([originStation, destinationStation]);
-			realTime(originStation);
+			realTime(originStation, true);
 		} else {
 			selectionsArray.push([originStation, viaStation]);
 			selectionsArray.push([viaStation, destinationStation]);
-			realTime(originStation);
-			realTime(viaStation);	
+			realTime(originStation, true);
+			realTime(viaStation, false);	
 		}
 		tripsArray = [];
 		getFirstTripPlan(selectionsArray);
-		
 		var convertOrig = convertStationAbbr(originStation);
 		var convertVia = convertStationAbbr(viaStation);
 		//append station name(s) to panel heading
@@ -206,6 +205,8 @@ $( document ).ready(function() {
 		$('#show-planner').hide();
 
 	});
+
+	
 
 	//function to validate time input 
 	function validateTime(timestring) {
@@ -264,7 +265,7 @@ $( document ).ready(function() {
 	};
 	//function to get trip legs for orig OR via to dest
 	function getTripLegs(response) {
-		console.log("response", response);
+		// console.log("response", response);
 		//for each available route at the station
 		tempTripsArray = [];
 		var tripPlan = response.root.schedule.request.trip;
@@ -352,10 +353,15 @@ $( document ).ready(function() {
 	};
 	var getRealTimeCount = 0;
 	//function to call BART API for real time train data
-	function realTime(station) {
+	function realTime(station, isOrigin) {
 		
 		var queryURL = "https://api.bart.gov/api/etd.aspx";
-
+		var callbackRedirect;
+		if (isOrigin) {
+			callbackRedirect = getRealOrig;
+		} else {
+			callbackRedirect = getRealVia;
+		}
 		$.ajax({
 			data: {
 				cmd: 'etd',
@@ -365,11 +371,21 @@ $( document ).ready(function() {
 			},
 			url: queryURL,
 			method: "GET"
-			}).done(getRealTime);
+			}).done(callbackRedirect);
 	};
 	
-	function getRealTime(response) {
+	function getRealOrig(response) {
+		console.log("getRealOrig");
+		getRealTime(response, true);
+	};
+	function getRealVia(response) {
+		console.log("getRealVia");
+		getRealTime(response, false);
+	};
 
+
+	function getRealTime(response, isOrigin) {
+		console.log("GRT response", response);
 		getRealTimeCount++;
 		console.log("get real time count", getRealTimeCount);
 		//get all real time data at the origin station
@@ -387,7 +403,7 @@ $( document ).ready(function() {
 				var allRealTimeAbbr = etd[i].abbreviation;
 				var allEstimates = etd[i].estimate;
 		
-				if (getRealTimeCount === 1) {
+				if (isOrigin) {
 					etdArray.push(allRealTimeDest, allRealTimeAbbr);
 				} else {
 					viaEtdArray.push(allRealTimeDest, allRealTimeAbbr);
@@ -399,24 +415,24 @@ $( document ).ready(function() {
 					var lineColor = allEstimates[j].hexcolor;
 					// console.log("minutesToArrive", minutesToArrive, "trainLength", trainLength, "lineColor", lineColor);
 					var estimatesArray = [minutesToArrive,trainLength,lineColor];
-					if (getRealTimeCount === 1) {
+					if (isOrigin) {
 						etdArray.push(estimatesArray);
 					} else {
 						viaEtdArray.push(estimatesArray);
 					}	
 				} 
 				console.log("get realtime ETDArr", etdArray);
-				if (getRealTimeCount === 1)	{
+				if (isOrigin)	{
 					realTimeArray.push(etdArray);
 				} else {
 					viaRealTimeArray.push(viaEtdArray);
 				}	
 			};
 
-			if (getRealTimeCount === 1) {
-				displayRealTime(realTimeArray);				
+			if (isOrigin) {
+				displayRealTime(realTimeArray, true);				
 			} else {
-				displayRealTime(viaRealTimeArray);
+				displayRealTime(viaRealTimeArray, false);
 				$('#via-rt-panel').show();
 			}
 		};
@@ -481,7 +497,7 @@ $( document ).ready(function() {
 		}
 	};
 	//function to display the data from realTime function
-	function displayRealTime(realTime) {
+	function displayRealTime(realTime, isOrigin) {
 		//loop through array containing all etd data 
 		for (var i = 0; i < realTime.length; i++) {
 			//create a div for each piece of ETD data
@@ -508,7 +524,7 @@ $( document ).ready(function() {
 				}
 				etd.append(" ("+realTime[i][j][1]+" "+"cars)");
 
-				if (getRealTimeCount === 1) {
+				if (isOrigin) {
 					$("#real-time").append(etd);
 				} else {
 					$("#via-real-time").append(etd);
