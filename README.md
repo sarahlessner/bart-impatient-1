@@ -1,12 +1,15 @@
-#bart-upstream
+# BART Upstream
 
-Sarah Lessner
+### Overview
 
-expanding on "bart-impatient" group project.
-I personally worked on the BART functionality and wish to expand on the features.
-Goals: adding "via point" for upstreaming (knowledgable BART users can decide based on experience how far to upstream)
-       automatically suggest upstream routes based on ability to make connection with x number of destination trains
+App using BART (Bay Area Rapid Transit) API to display trip plans and real time train data.
 
-Changes from original project:
-Omitting YouTube features from original project
-Designing my own more simplistic front-end
+    * Trip plan defaults to current time but users have the option to enter a specific time
+
+    * Users can add a "via" point to their trip. Useful for "upstreaming" during rush hour. 
+
+    * Station information page displays information about BART station and the surrounding area
+
+    * Station Map
+
+
