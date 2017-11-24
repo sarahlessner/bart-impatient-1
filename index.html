@@ -11,7 +11,7 @@
 	<link href="https://fonts.googleapis.com/css?family=Boogaloo|Reem+Kufi" rel="stylesheet">
 
 	<link rel="stylesheet" type="text/css" href="assets/style.css">
-  	
+
 </head>
 
 	<nav class="navbar navbar-inverse">
@@ -27,38 +27,36 @@
 	      <a class="navbar-brand page-title" href="index.html">BART Tracker</a>
 	    </div>
 
-	    <!-- Collect the nav links, forms, and other content for toggling -->
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	      <ul class="nav navbar-nav">
 	        <li class="active"><a href="index.html">Trip Planner<span class="sr-only">(current)</span></a></li>
 	        <li><a href="stations.html">Station Info</a></li>
 	        <li><a href="map.html">Map</a></li>
 	      </ul>
-	    </div><!-- /.navbar-collapse -->
-	  </div><!-- /.container-fluid -->
+	    </div>
+
+	  </div>
 
 	  <div>
 	  	<img class=bart-train src="assets/images/bart-train.png">
 	  </div>
+
 	</nav>
-	
+
 	<!-- SERVICE ADVISORIES ID service-advisories -->
 	<div class="container">
 		<div class="row">
 			<div class="alert-panel col-md-12">
-				<div id="service-advisories">
-				</div>
+				<div id="service-advisories"></div>
 			</div>
 		</div>
 	</div>
 
-			
 	<!-- form area for user selections -->
 
 	<div class="container" id="plan-a-trip">
 		<div class="row">
 			<div class="selection-panel col-md-12">
-
 				<div class="panel panel-primary">
 					<div class="panel-heading">
 						<h3 class="panel-title">Plan a Trip</h3>
@@ -70,26 +68,27 @@
 						<form>
 						<!-- list drop downs will always display on page load -->
 						<div class="input-append">
-							
-    						<input title="defaults to now" type="text" id="time-selection" class="input-small" placeholder="  click to select time" readonly>
-    						<button title="enter time (optional)" class="timepicker" type="button" id="toggle-btn"><span class="glyphicon glyphicon-time" aria-hidden="true"></span></button>
-    						</button><button title="clear time" id="time-clear" type="button">
-        					<span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button>
+  						<input title="defaults to now" type="text" id="time-selection" class="input-small" placeholder="  click to select time" readonly>
+  						<button title="enter time (optional)" class="timepicker" type="button" id="toggle-btn"><span class="glyphicon glyphicon-time" aria-hidden="true"></span></button>
+  						</button>
+							<button title="clear time" id="time-clear" type="button">
+      					<span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+							</button>
 						</div>
+
 							<select class="form-control" id="origin-list">
 								<option selected>Select Origin Station</option>
-									<!-- station options list will live here -->
 							</select>
 							<a id="reverse-selection"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span></a>
 							<!-- optional via point field -->
 							<select class="form-control" id="via-list">
 							<option id="via-default" value="placeholder-station" selected>Select Via Station</option>
 							</select>
-							
+
 							<select class="form-control" id="destination-list">
 							<option selected>Select Destination Station</option>
 							</select>
-							
+
 							<a class="via-toggle">Add/Remove Via Station</a><br>
 
 							<button type="submit" class="btn btn-primary" id="addTrainBtn">Get Trip Plan!</button>
@@ -138,15 +137,6 @@
 		</div>
 	</div>
 
-<!-- <div class="panel-heading" id="via-rt-panel">
-						<h3 class="panel-title"><span id="via-real-time-origin"></span> Trains Arriving</h3>
-					</div>
-
-					<div class="panel-body trip-container" id="via-rt-panel">
-						<div id="via-real-time">
-						</div>
-					</div> -->
-
 	<!--SCHEDULE DATA - WILL DISPLAY USERS TRIP PLANS #trip-plan -->
 
 	<div class="container" id="trip-plan-container">
@@ -167,19 +157,15 @@
 	</div>
 
 
-	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+	<script src="assets/clockface/js/clockface.js"></script>
+	<script src="assets/app.js"></script>
+	  <!-- bootbox needs to live below jquery/bootstrap -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 
 
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
-<script src="assets/clockface/js/clockface.js"></script>
-<script src="assets/app.js"></script>
-  <!-- bootbox needs to live below jquery/bootstrap -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
-
-
- 
+	 
 </body>
 </html>
