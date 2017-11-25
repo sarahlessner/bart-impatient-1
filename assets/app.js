@@ -43,7 +43,6 @@ $( document ).ready(function() {
 					stationAbbr = response.root.stations.station[i].abbr;
 					stationNameArray.push(stationName);
 					stationAbbrArray.push(stationAbbr);
-					//clean these lists up - DRY
 					//append station list to <ul>origin list
 					originList = $("<option>");
 					originList.addClass("origin-selection");
@@ -80,7 +79,7 @@ $( document ).ready(function() {
     	$('#time-selection').clockface({
         format: 'h:mm a',
         trigger: 'manual'
-    	});   
+    	});
 
     	$('#time-selection').hide();
 
@@ -91,11 +90,11 @@ $( document ).ready(function() {
     		$('#time-clear').show();
     	});
 
-    	$('#time-selection').on("click",function(e){   
+    	$('#time-selection').on("click",function(e){
 	        e.stopPropagation();
 	        $('#time-selection').clockface('toggle');
     	});
-    	
+
 	});
 	//clear time
 	$('#time-clear').on("click", function(){
@@ -104,7 +103,7 @@ $( document ).ready(function() {
 		$('#time-clear').hide();
 		$('#toggle-btn').show();
 	});
-	
+
 	//hide train schedules as default
 	$("#real-time-container").hide();
 	$("#via-rt-panel").hide();
@@ -118,7 +117,7 @@ $( document ).ready(function() {
 		var placeholder = $("#origin-list").val();
 		$("#origin-list").val($("#destination-list").val());
 		$("#destination-list").val(placeholder);
-		
+
 	});
 	//hide via station selection and its hide button as default
 	$("#via-list").hide();
@@ -163,13 +162,13 @@ $( document ).ready(function() {
 		if (timeInput === "") {
 			myTime = "now";
 		} else if (validateTime(timeInput)) {
-			//if time is valid store the input 
+			//if time is valid store the input
 			myTime = timeInput;
 		} else {
 			bootbox.alert("Please enter time in 'h:mm am' format");
 			return;
 		}
-		
+
 		if ((originStation === "Select Origin Station") || (destinationStation === "Select Destination Station")) {
 			bootbox.alert("Please select an origin AND destination station!");
 			return;
@@ -178,7 +177,7 @@ $( document ).ready(function() {
 			bootbox.alert("'Origin Station' and 'Destination Station' cannot be the same!");
 			return;
 		}
-		
+
 		selectionsArray = [];
 		selectionsIdx = 0;
 		if (viaStation === "placeholder-station") {
@@ -188,7 +187,7 @@ $( document ).ready(function() {
 			selectionsArray.push([originStation, viaStation]);
 			selectionsArray.push([viaStation, destinationStation]);
 			realTime(originStation, true);
-			realTime(viaStation, false);	
+			realTime(viaStation, false);
 		}
 		tripsArray = [];
 		getFirstTripPlan(selectionsArray);
@@ -206,14 +205,14 @@ $( document ).ready(function() {
 
 	});
 
-	
 
-	//function to validate time input 
+
+	//function to validate time input
 	function validateTime(timestring) {
 		var checkUserTime = moment(timestring,'h:mm a', true);
 		return checkUserTime.isValid();
 	};
-	
+
 	var firstTripPlan = 5;
 	//function calling BARTS schedule info API to get a trip plan based on origin/dest
 	function getFirstTripPlan(selections) {
@@ -239,7 +238,7 @@ $( document ).ready(function() {
 				url: queryURL,
 				method: "GET"
 				}).done(getTripLegs);
-		
+
 	};
 	var firstTripIdx = 0;
 	//function to get trip plan from via - dest if applicable
@@ -320,7 +319,7 @@ $( document ).ready(function() {
 				tripsArray.push(legsArray);
 			}
 
-		};		
+		};
 		if (selectionsIdx !== 0)
 			firstTripIdx++;
 
@@ -348,13 +347,13 @@ $( document ).ready(function() {
 			if(oldTripString == newTripString)
 				return true;
 		}
-	
+
 		return false;
 	};
 	var getRealTimeCount = 0;
 	//function to call BART API for real time train data
 	function realTime(station, isOrigin) {
-		
+
 		var queryURL = "https://api.bart.gov/api/etd.aspx";
 		var callbackRedirect;
 		if (isOrigin) {
@@ -373,7 +372,7 @@ $( document ).ready(function() {
 			method: "GET"
 			}).done(callbackRedirect);
 	};
-	
+
 	function getRealOrig(response) {
 		console.log("getRealOrig");
 		getRealTime(response, true);
@@ -402,7 +401,7 @@ $( document ).ready(function() {
 				var allRealTimeDest = etd[i].destination;
 				var allRealTimeAbbr = etd[i].abbreviation;
 				var allEstimates = etd[i].estimate;
-		
+
 				if (isOrigin) {
 					etdArray.push(allRealTimeDest, allRealTimeAbbr);
 				} else {
@@ -419,24 +418,24 @@ $( document ).ready(function() {
 						etdArray.push(estimatesArray);
 					} else {
 						viaEtdArray.push(estimatesArray);
-					}	
-				} 
+					}
+				}
 				console.log("get realtime ETDArr", etdArray);
 				if (isOrigin)	{
 					realTimeArray.push(etdArray);
 				} else {
 					viaRealTimeArray.push(viaEtdArray);
-				}	
+				}
 			};
 
 			if (isOrigin) {
-				displayRealTime(realTimeArray, true);				
+				displayRealTime(realTimeArray, true);
 			} else {
 				displayRealTime(viaRealTimeArray, false);
 				$('#via-rt-panel').show();
 			}
 		};
-					 	
+
 	};
 
 	//function to display data from getTripPlan function
@@ -477,7 +476,7 @@ $( document ).ready(function() {
 				tripLeg.append(tripsArray[i][j][3]+"  -  ");
 				//append final train destination
 				tripLeg.append(finalTrainDest+" "+"Train <br>");
-				
+
 				// tripLeg.append("Train Crowding: "+loadValue+"<br>")
 				// append origin leg
 				tripLeg.append(legOrigin+" "+"<img width='20'src='assets/images/greenarrow.png'>"+" ");
@@ -498,7 +497,7 @@ $( document ).ready(function() {
 	};
 	//function to display the data from realTime function
 	function displayRealTime(realTime, isOrigin) {
-		//loop through array containing all etd data 
+		//loop through array containing all etd data
 		for (var i = 0; i < realTime.length; i++) {
 			//create a div for each piece of ETD data
 			// var etd = $("<div>");
@@ -528,7 +527,7 @@ $( document ).ready(function() {
 					$("#real-time").append(etd);
 				} else {
 					$("#via-real-time").append(etd);
-			
+
 				}
 			}
 		}
@@ -556,7 +555,7 @@ $( document ).ready(function() {
 
 	};
 
-	//service advisory API 
+	//service advisory API
 	$("#service-advisories").hide();
 	function serviceAdvisory()	{
 
@@ -579,7 +578,7 @@ $( document ).ready(function() {
 					if ((timeOfAlert === undefined) || (bsa === "No delays reported.")) {
 						$("#service-advisories").empty();
 						$("#service-advisories").hide();
-					}	
+					}
 					else {
 						// $("#service-advisories").addClass("service-alert");
 						$("#service-advisories").append(timeOfAlert+"<br>", bsa);
@@ -592,7 +591,7 @@ $( document ).ready(function() {
 
 	stationsByLine();
 	var routeNamesArray = [];
-	//multi-dimensional array containing lists of stations on the 12 routes 
+	//multi-dimensional array containing lists of stations on the 12 routes
 	var routeStationListsArray = [];
 	var routeNumsArr = [];
 	var routeColorsArr = [];
@@ -613,14 +612,9 @@ $( document ).ready(function() {
 				console.log(line, lineColor);
 				routeColorsArr.push(lineColor);
 				routeNumsArr.push(line);
-				// var stationsOnRoute = response.root.routes.route[i].config.station;
-				// //push route names to array
-				// routeNamesArray.push(route);
-				// //push lists of stations on routes to multi-dimensional array
-				// routeStationListsArray.push(stationsOnRoute);
 			}
 			console.log(routeColorsArr);
-		});    	
+		});
 
 	};
 
@@ -636,7 +630,7 @@ $( document ).ready(function() {
 		$("#about-station-container").show();
 		getStationInfo();
 	});
-	
+
 	//BART Station Info API
 	function getStationInfo() {
 		var queryURL = "https://api.bart.gov/api/stn.aspx";
@@ -654,15 +648,4 @@ $( document ).ready(function() {
 
 		});
 	};
-
-
-});	
-
-
-
-
-
-
-
-
-
+});
