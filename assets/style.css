@@ -1,5 +1,5 @@
 body {
-  background-image: url("images/hexellence.png");
+  background-image: url("images/swirl.jpg");
   background-color: #ebf3f7;
 }
 
@@ -68,7 +68,7 @@ a {
 
 .panel,
 .panel-primary {
-  border-color: black;
+  border-color: whitesmoke;
 
 }
 
@@ -240,6 +240,10 @@ p {
 
   .bart-train {
     display: none;
+  }
+
+  .page-title {
+    font-size: 30px;
   }
 
 }
