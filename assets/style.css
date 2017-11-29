@@ -7,8 +7,8 @@ body {
   font-family: 'Boogaloo', cursive;
   font-size: 50px;
   font-weight: bolder;
-  color: #0083d2 !important;
-  
+  color: #4d5580 !important;
+
 }
 
 .bart-train {
@@ -23,19 +23,19 @@ body {
 .navbar {
   clear: both;
   border-radius: 0;
-  background-color: white;
+  background-color: #ecedf7;
 
 }
 
-.navbar-inverse .navbar-nav>.active>a, 
-.navbar-inverse .navbar-nav>.active>a:focus, 
+.navbar-inverse .navbar-nav>.active>a,
+.navbar-inverse .navbar-nav>.active>a:focus,
 .navbar-inverse .navbar-nav>.active>a:hover {
     color: #fff;
-    background-color: #0083d2;
+    background-color: #4d5580;
 }
 
 .trip-white {
-  background: whitesmoke;
+  background: #ecedf7;
 }
 
 #show-planner {
@@ -50,10 +50,12 @@ li {
   list-style: none;
 }
 
-
+a {
+  color: #219cc1;
+}
 .panel-primary>.panel-heading {
   color: #fff;
-  background-color: #0083d2;
+  background-color: #4d5580;
 
 }
 
@@ -127,7 +129,7 @@ span.glyphicon-sort {
   -moz-transform: scaleX(-1);
   -webkit-transform: scaleX(-1);
   -ms-transform: scaleX(-1);
-  
+
 }
 
 span.glyphicon-triangle-bottom {
@@ -136,7 +138,7 @@ span.glyphicon-triangle-bottom {
 
 
 .form-control:focus {
- 
+
   border-color: #86f0db;
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(86,209,185 0.5);
 
@@ -145,7 +147,7 @@ span.glyphicon-triangle-bottom {
 #time-clear,
 .timepicker {
   clear: both;
-  background-color: #0083d2;
+  background-color: #219cc1;
   border-radius: 50%;
   border: none;
   margin-right: 2px;
@@ -165,7 +167,7 @@ span.glyphicon-triangle-bottom {
 #getStnInfo,
 #addTrainBtn {
   margin-top: 10px;
-  background-color: #0083d2;
+  background-color: #4d5580;
   color: white;
   border: 1px solid black;
   font-size: 14px;
@@ -179,14 +181,14 @@ span.glyphicon-triangle-bottom {
 
 .btn:hover {
   background-color: gray;
-  
+
 }
 
 .btn:focus {
   border-color: #60d3ff;
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(86,209,185 0.5);
   background-color: white !important;
-  color: #0083d2 !important;
+  color: #4d5580 !important;
 }
 
 .etd-train, .trip-option {
@@ -219,7 +221,7 @@ span.glyphicon-triangle-bottom {
   margin-right: 5px;
   border-radius: 50%;
 }
- 
+
 p {
   clear:both;
   font-style: italic;
